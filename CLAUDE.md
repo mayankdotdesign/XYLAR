@@ -80,6 +80,11 @@ beam-gradient ring is the intelligence layer made literal — it satisfies the b
   counters, chart draw-ins (lines sweep, bars grow, heatmap cells cascade).
 - SAE scroll-locked canvas stage: chaos → grid+links → beam signal path (380vh section).
 - v3 infographics (each degrades to a static frame under reduced-motion):
+  - Signal-merge (05): four labelled source waveforms (Denton italic “+” between
+    labels, per the source slide's equation) grow agitated mid-flight, converge
+    through a small SAE vesica node and exit as one calm beam-gradient line ending
+    at “= Actionable insights”; draw-in on reveal, ambient wave motion, hover
+    isolates a source line. Gaps/Our-edge note cards sit alongside.
   - SAE lens (03): dotted ring ignites sequentially, vesica blooms (vertical beam:
     blue crown → orange base), cursor-proximity dot brightening + lens glow; on ≤720px
     the SVG lists restack as HTML below the diagram for legibility.

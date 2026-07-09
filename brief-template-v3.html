@@ -85,7 +85,7 @@ h1 em,h2 em{font-style:italic;font-weight:300}
   .alad-radial .seg,.alad-radial .dotring,.alad-radial .comp-arc,
   .alad-radial .core-ring,.alad-radial .core,
   .flowviz .fnode,.flowviz .fedge,.flowviz .cov-dot,
-  .odl-labels span,
+  .sig-labels span,
   .pipe-cap,.pgate,.pipe-outcome,.pipe-engine{transition:none}
 }
 .rule{height:1px;background:var(--hairline);border:0}
@@ -396,37 +396,37 @@ nav .btn{padding:9px 18px;font-size:12px}
 .beam-stat .sub{margin-top:14px;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
 
 /* ============================================================
-   05 — Data overload stage
+   05 — Data overload: the signal-merge figure
+   Four live source waveforms — increasingly agitated as they
+   travel — converge through the SAE lens node into one calm
+   beam-gradient line: the original slide's equation, in motion.
    ============================================================ */
-/* overload stage (05): pinned 3-beat scroll story.
-   Beat 1 — four source rows fill with data ticks, left to right.
-   Beat 2 — the rows collapse into one dense wall that crosses a flat
-            "analysis capacity" line: volume vs capacity, made visible.
-   Beat 3 — the wall recedes to a murmur and one beam-lit insight curve
-            is drawn up and out of the noise. */
-.odl{height:280vh;position:relative}
-.odl-stage{position:sticky;top:0;height:100vh;overflow:hidden}
-#odlCanvas{position:absolute;inset:0;width:100%;height:100%}
-.odl-labels{position:absolute;inset:0;z-index:2;pointer-events:none}
-.odl-labels span{position:absolute;transition:opacity .6s var(--ease),transform .6s var(--ease)}
-.odl .row-l{
-  font-size:12px;color:var(--text-2);transform:translateY(-50%);
-  width:21%;text-align:right;
-  opacity:0;transition-delay:var(--d,0s);
+.eq-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:56px;align-items:center}
+@media(max-width:1000px){.eq-grid{grid-template-columns:1fr;gap:40px}}
+.eq-rail{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:22px;text-align:center}
+.sigfig{position:relative;width:100%;max-width:680px;aspect-ratio:13/9;margin:0 auto}
+#sigCanvas{position:absolute;inset:0;width:100%;height:100%}
+.sig-labels{position:absolute;inset:0;pointer-events:none}
+.sig-labels span{position:absolute;opacity:0;transition:opacity .7s var(--ease) var(--sd,0s),color .3s var(--ease)}
+.sigfig.in .sig-labels span{opacity:1}
+.sig-l{
+  font-size:12px;color:var(--text-2);
+  right:78.5%;text-align:right;transform:translateY(-50%);white-space:nowrap;
 }
-.odl.z1 .row-l{opacity:1}
-.odl.z2 .row-l,.odl.z3 .row-l{opacity:0;transition-delay:0s}
-.odl .cap-l{
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;
-  transform:translateY(-130%);opacity:0;
+.sig-l.hov{color:#FFFFFF}
+.sig-plus{
+  font-family:var(--serif);font-style:italic;font-weight:300;font-size:17px;color:var(--muted);
+  right:80%;transform:translate(50%,-50%);
 }
-.odl.z2 .cap-l{opacity:1}
-.odl.z3 .cap-l{opacity:.45}
-.odl .ins-l{
-  font-size:13px;font-weight:500;color:var(--white);transform:translate(-8px,-160%);opacity:0;
+.sig-sae{
+  font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--muted);
+  transform:translate(-50%,0);
 }
-.odl.z3 .ins-l{opacity:1;transform:translate(0,-160%)}
-@media(max-width:720px){.odl .row-l{font-size:10px;max-width:96px;line-height:1.4}}
+.sig-out{font-size:12.5px;font-weight:500;color:var(--white);right:1%;transform:translateY(-50%);white-space:nowrap}
+.sig-out i{font-family:var(--serif);font-style:italic;font-weight:300;color:var(--muted);margin-right:7px;font-size:15px}
+.sigfig .sig-sae,.sigfig .sig-out{opacity:0!important;transition:opacity .7s var(--ease)}
+.sigfig.go .sig-sae,.sigfig.go .sig-out{opacity:1!important}
+@media(max-width:720px){.sig-l{font-size:10px}.sig-out{font-size:11px}}
 .note-card{padding:26px 28px;margin-bottom:14px}
 .note-card h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:10px}
 .note-card p{font-size:13.5px;color:var(--text-2);line-height:1.7}
@@ -800,17 +800,27 @@ footer{border-top:1px solid var(--hairline);padding:80px 0 60px}
   </div>
 </section>
 
-<!-- ============ 05 · DATA OVERLOAD (pinned 3-beat stage) ============ -->
-<section class="odl" id="ch5">
-  <div class="odl-stage">
-    <canvas id="odlCanvas"></canvas>
-    <div class="pipe-head">
-      <p class="eyebrow">05 &middot; Challenge I &nbsp;&middot;&nbsp; Figure 02</p>
-      <h2>Data is everywhere, but insight requires skill and <em>technology.</em></h2>
+<!-- ============ 05 · DATA OVERLOAD (signal-merge figure) ============ -->
+<section class="ch" id="ch5" style="padding-top:60px">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">05 &middot; Challenge I</p>
+      <h2 class="rv" style="--d:.08s">Data is everywhere, but insight requires skill and <em>technology.</em></h2>
     </div>
-    <div class="odl-labels" id="odlLabels"></div>
-    <div class="pipe-cap glass" id="odlCap"><span class="n"></span><h3></h3><p></p></div>
-    <div class="pipe-progress" id="odlProg"></div>
+    <div class="eq-grid">
+      <div class="rv">
+        <p class="eq-rail">Figure 02 &middot; Raw data &amp; information overload</p>
+        <div class="sigfig" id="sigfig">
+          <canvas id="sigCanvas"></canvas>
+          <div class="sig-labels" id="sigLabels"></div>
+        </div>
+      </div>
+      <div class="rv" style="--d:.12s">
+        <h3 class="why-head" style="font-size:23px">The problem isn't lack of information — <em>it's too much, too fast.</em></h3>
+        <div class="note-card glass gaps"><h4>Gaps</h4><p id="gapsP5"></p></div>
+        <div class="note-card glass edge"><h4>Our edge</h4><p id="edgeP5"></p></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1183,6 +1193,7 @@ function dotIcon(kind, light=false){
   $('#saeCaptions').innerHTML=DATA.sae.captions.map((c,i)=>`
     <div class="sae-cap glass" data-i="${i}"><span class="n">${c.n}</span><h3>${c.h}</h3><p>${c.p}</p></div>`).join('');
   $('#saeChip').innerHTML=`<i></i>${DATA.sae.chip}`;
+  $('#gapsP5').innerHTML=DATA.ch5.gaps; $('#edgeP5').innerHTML=DATA.ch5.edge;
   $('#gapsP6').innerHTML=DATA.ch6.gaps; $('#edgeP6').innerHTML=DATA.ch6.edge;
   $('#whyCards').innerHTML=DATA.whyCards.map((c,i)=>`
     <div class="wc glass tilt rv" style="--d:${i*.08}s"><div class="sheen"></div>
@@ -1449,120 +1460,108 @@ function flow(el, dim, bright, beam, total){
 flow($('#hubTrad'), [], DATA.ch6.trad, false, DATA.ch6.trad.length+DATA.ch6.alt.length);
 flow($('#hubAlt'), DATA.ch6.trad, DATA.ch6.alt, true, DATA.ch6.trad.length+DATA.ch6.alt.length);
 
-/* ---------- ch5 · overload stage (pinned 3-beat scroll story) ---------- */
-(function odl(){
-  const sec=$('#ch5'),cv=$('#odlCanvas');
-  if(!sec||!cv)return;
+/* ---------- ch5 · signal-merge figure (4 waveforms → SAE → 1 signal) ---------- */
+(function sig(){
+  const box=$('#sigfig'),cv=$('#sigCanvas'),labels=$('#sigLabels');
+  if(!box||!cv)return;
   const ctx=cv.getContext('2d');
-  const stage=$('.odl-stage',sec),labels=$('#odlLabels'),capEl=$('#odlCap'),progEl=$('#odlProg');
-  const capN=$('.n',capEl),capH=$('h3',capEl),capP=$('p',capEl);
-  const rnd=i=>{const x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x)};
-  const ROWS_Y=[.34,.46,.58,.70],BAND={c:.52,max:.16},CAPY=.635;
-  const X0=.28,X1=.93,COLS=96;
-  const CURVE={x0:.34,y0:.52,cx:.62,cy:.34,x1:.90,y1:.285};
-  let W,H,dpr,raf=null,zone=-1,t0=performance.now();
-  const BEATS=[
-    {n:'01 — Everywhere',h:'Data is <em>everywhere.</em>',
-     p:DATA.ch5.sources.join(' · ')+' — multiple data streams, arriving at once.'},
-    {n:'02 — The overload',h:"It's <em>too much, too fast.</em>",p:DATA.ch5.gaps},
-    {n:'03 — The filter',h:'Filtered into <em>insight.</em>',p:DATA.ch5.edge},
-  ];
+  const LANES=[.14,.38,.62,.86],CY=.5,XL=.235,XM=.60,XO=.945,P=120;
+  let W,H,dpr,raf=null,started=0,hov=-1,went=false;
   labels.innerHTML=
-    DATA.ch5.sources.map((s,i)=>`<span class="row-l" style="left:5%;top:${ROWS_Y[i]*100}%;--d:${(.1+i*.14).toFixed(2)}s">${s}</span>`).join('')
-    +`<span class="cap-l" style="right:${(1-X1)*100}%;top:${CAPY*100}%">Analysis capacity</span>`
-    +`<span class="ins-l" style="right:${(1-CURVE.x1)*100-2}%;top:${CURVE.y1*100}%">${DATA.ch5.result}</span>`;
-  progEl.innerHTML=BEATS.map((b,i)=>`<span data-i="${i}">${b.n}</span>`).join('');
-  const railEls=$$('span',progEl);
+    DATA.ch5.sources.map((s,i)=>`<span class="sig-l" data-i="${i}" style="top:${LANES[i]*100}%;--sd:${(.1+i*.18).toFixed(2)}s">${s}</span>`).join('')
+    +LANES.slice(0,-1).map((y,i)=>`<span class="sig-plus" style="top:${((y+LANES[i+1])/2)*100}%;--sd:${(.24+i*.18).toFixed(2)}s">+</span>`).join('')
+    +`<span class="sig-sae" style="left:${XM*100}%;top:${(CY-.185)*100}%">SAE</span>`
+    +`<span class="sig-out" style="top:${(CY-.085)*100}%"><i>=</i>${DATA.ch5.result}</span>`;
+  const laneEls=$$('.sig-l',labels);
   function build(){
     dpr=Math.min(devicePixelRatio||1,2);
     W=cv.clientWidth;H=cv.clientHeight;
     cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  function draw(p,tt){
+  /* each source line: calm at its lane, increasingly agitated mid-flight,
+     then gathered and stilled as it converges on the SAE node */
+  function laneY(i,t,tt){
+    const conv=smooth(.60,.98,t);
+    const A=(1.3+8.5*Math.pow(t,1.6))*(1-conv*.9)*(hov===i?1.25:1);
+    return (lerp(LANES[i],CY,conv)
+      +Math.sin(t*(3.1+i*.8)*6.283+i*2.1+tt*(1.0+i*.16))*A/H
+      +Math.sin(t*(6.9+i*1.3)*6.283+i*.7+tt*1.8)*A*.35/H)*H;
+  }
+  function draw(tt){
     ctx.clearRect(0,0,W,H);
-    const t1=smooth(.02,.30,p),t2=smooth(.36,.62,p),t3=smooth(.68,.92,p);
-    const x0=X0*W,x1=X1*W,bw=x1-x0;
-    const bandC=BAND.c*H,bandH=lerp(.014,BAND.max,t2)*H;
-    /* analysis-capacity hairline: flat, dashed, immovable */
-    if(t2>0){
-      const a=.34*t2*(1-.5*t3);
-      ctx.strokeStyle=`rgba(255,255,255,${a.toFixed(3)})`;
-      ctx.lineWidth=1;ctx.setLineDash([2,6]);
-      ctx.beginPath();ctx.moveTo(x0,CAPY*H);ctx.lineTo(x1,CAPY*H);ctx.stroke();
-      ctx.setLineDash([]);
-    }
-    /* the data ticks: four rows filling, then collapsing into the wall */
-    const wallFade=1-.88*t3;
-    for(let row=0;row<4;row++){
-      const rowY=ROWS_Y[row]*H;
-      const rowDelay=row*.06;
-      const fill=clamp((t1-rowDelay)/(1-rowDelay||1),0,1);
-      for(let c=0;c<COLS;c++){
-        const u=c/COLS,seed=row*COLS+c;
-        if(u>fill*(1.04+.08*rnd(seed+3)))continue;
-        /* each source contributes 1 tick in beat 1; the wall triples density */
-        const reps=1+Math.round(2*t2*(0.6+rnd(seed+7)));
-        for(let k=0;k<reps;k++){
-          const jy=(rnd(seed+11+k*31)-.5);
-          const y=lerp(rowY+jy*10,bandC+jy*2*bandH,t2);
-          const x=x0+u*bw+(rnd(seed+17+k*13)-.5)*10;
-          const flick=.82+.18*Math.sin(tt*2.2+seed*1.7+k);
-          const a=(.24+.3*rnd(seed+23+k))*flick*wallFade*(k===0?1:t2);
-          if(a<=0.01)continue;
-          ctx.fillStyle=`rgba(255,255,255,${a.toFixed(3)})`;
-          ctx.fillRect(x,y-3.5,1.4,7);
-        }
+    const el=started?Math.min((performance.now()-started)/1000,9):0;
+    for(let i=0;i<4;i++){
+      const k=reduced?1:clamp((el-.15-i*.22)/.9,0,1);
+      if(k<=0)continue;
+      const n=Math.floor(P*(1-Math.pow(1-k,3)));
+      ctx.strokeStyle=`rgba(255,255,255,${hov<0?.5:(hov===i?.9:.26)})`;
+      ctx.lineWidth=hov===i?1.5:1.2;ctx.lineJoin=ctx.lineCap='round';
+      ctx.beginPath();
+      for(let j=0;j<=n;j++){
+        const t=j/P,x=lerp(XL,XM,t)*W,y=laneY(i,t,tt);
+        j?ctx.lineTo(x,y):ctx.moveTo(x,y);
       }
+      ctx.stroke();
     }
-    /* beat 3: one insight curve rises out of the noise */
-    if(t3>0){
-      const cx0=CURVE.x0*W,cy0=CURVE.y0*H,ccx=CURVE.cx*W,ccy=CURVE.cy*H,cx1=CURVE.x1*W,cy1=CURVE.y1*H;
-      ctx.save();
-      ctx.beginPath();ctx.rect(0,0,lerp(cx0,cx1+30,t3),H);ctx.clip();
-      const gr=ctx.createLinearGradient(cx0,0,cx1,0);
+    /* SAE node: the lens, at aperture scale */
+    const kn=reduced?1:clamp((el-1.25)/.5,0,1);
+    if(kn>0){
+      const x=XM*W,hh=H*.085;
+      ctx.strokeStyle=`rgba(255,255,255,${(.42*kn).toFixed(3)})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x,CY*H-hh);ctx.quadraticCurveTo(x+7,CY*H,x,CY*H+hh);
+      ctx.quadraticCurveTo(x-7,CY*H,x,CY*H-hh);ctx.stroke();
+    }
+    /* the one calm output line, in the beam */
+    const ko=reduced?1:clamp((el-1.5)/.9,0,1);
+    if(ko>0){
+      const n=Math.floor(P*(1-Math.pow(1-ko,3)));
+      const gr=ctx.createLinearGradient(XM*W,0,XO*W,0);
       BEAM.forEach((c,i)=>gr.addColorStop(i/3,c));
-      ctx.strokeStyle=gr;ctx.lineWidth=2;ctx.lineCap='round';
-      ctx.shadowColor='rgba(159,255,251,.4)';ctx.shadowBlur=12*t3;
-      ctx.beginPath();ctx.moveTo(cx0,cy0);
-      ctx.quadraticCurveTo(ccx,ccy,cx1,cy1);
+      ctx.strokeStyle=gr;ctx.lineWidth=1.8;
+      ctx.shadowColor='rgba(159,255,251,.28)';ctx.shadowBlur=9*ko;
+      ctx.beginPath();
+      for(let j=0;j<=n;j++){
+        const t=j/P,x=lerp(XM+.004,XO,t)*W;
+        const y=CY*H+Math.sin(t*4.2*6.283+tt*1.15)*1.7;
+        j?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
       ctx.stroke();ctx.shadowBlur=0;
-      ctx.restore();
-      /* extraction lens at the curve's root, endpoint dot at its tip */
-      ctx.strokeStyle=`rgba(255,255,255,${(.4*t3).toFixed(3)})`;ctx.lineWidth=1;
-      const lh=bandH+14;
-      ctx.beginPath();ctx.moveTo(cx0,bandC-lh);ctx.quadraticCurveTo(cx0+8,bandC,cx0,bandC+lh);
-      ctx.quadraticCurveTo(cx0-8,bandC,cx0,bandC-lh);ctx.stroke();
-      if(t3>.96){
+      if(ko>.97){
         ctx.fillStyle='rgba(255,255,255,.95)';
-        ctx.shadowColor='rgba(255,255,255,.8)';ctx.shadowBlur=10;
-        ctx.beginPath();ctx.arc(cx1,cy1,3.2,0,6.2832);ctx.fill();
+        ctx.shadowColor='rgba(255,255,255,.7)';ctx.shadowBlur=9;
+        ctx.beginPath();ctx.arc(XO*W,CY*H+Math.sin(4.2*6.283+tt*1.15)*1.7,3,0,6.2832);ctx.fill();
         ctx.shadowBlur=0;
       }
-    }
-    /* zones drive labels, caption, rail */
-    const zi=p<.34?0:p<.66?1:2;
-    if(zi!==zone){
-      zone=zi;
-      sec.classList.toggle('z1',zi===0);
-      sec.classList.toggle('z2',zi===1);
-      sec.classList.toggle('z3',zi===2);
-      railEls.forEach((s,i)=>s.classList.toggle('on',i===zi));
-      const set=()=>{capN.textContent=BEATS[zi].n;capH.innerHTML=BEATS[zi].h;capP.innerHTML=BEATS[zi].p};
-      if(reduced){set();capEl.classList.add('on')}
-      else{capEl.classList.remove('on');setTimeout(()=>{set();capEl.classList.add('on')},190)}
+      if(!went&&ko>.15){went=true;box.classList.add('go')}
     }
   }
-  function progress(){
-    const r=sec.getBoundingClientRect();
-    return clamp(-r.top/(r.height-innerHeight),0,1);
+  let t0=performance.now();
+  function frame(t){draw((t-t0)/1000);raf=requestAnimationFrame(frame)}
+  build();addEventListener('resize',build);
+  /* hover: nearest source line brightens, others recede */
+  if(finePointer&&!reduced){
+    box.addEventListener('pointermove',e=>{
+      const b=box.getBoundingClientRect();
+      const rx=(e.clientX-b.left)/b.width,ry=(e.clientY-b.top)/b.height;
+      let best=-1,bd=.09;
+      if(rx>XL-.22&&rx<XM){
+        LANES.forEach((ly,i)=>{
+          const d=Math.abs(ry-lerp(ly,CY,smooth(.60,.98,(rx-XL)/(XM-XL))));
+          if(d<bd){bd=d;best=i}
+        });
+      }
+      if(best!==hov){hov=best;laneEls.forEach((l,i)=>l.classList.toggle('hov',i===hov))}
+    });
+    box.addEventListener('pointerleave',()=>{hov=-1;laneEls.forEach(l=>l.classList.remove('hov'))});
   }
-  function frame(t){draw(progress(),(t-t0)/1000);raf=requestAnimationFrame(frame)}
-  build();addEventListener('resize',()=>{build();draw(progress(),0)});
-  if(reduced){draw(1,5.2);return}
+  if(reduced){box.classList.add('in','go');draw(4.1);return}
   new IntersectionObserver(es=>{
-    if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
-    else{cancelAnimationFrame(raf);raf=null}
-  }).observe(stage);
+    if(es[0].isIntersecting){
+      if(!started)started=performance.now();
+      box.classList.add('in');
+      if(!raf)raf=requestAnimationFrame(frame);
+    }else{cancelAnimationFrame(raf);raf=null}
+  }).observe(box);
 })();
 
 /* ---------- Exhibit A · 3-series line chart ---------- */
