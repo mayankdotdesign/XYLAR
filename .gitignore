@@ -1,3 +1,4 @@
 # root build artifact — regenerate with: python3 build.py
 /xylar-flexicap-report-v2.html
 node_modules/
+/xylar-flexicap-report-v3.html

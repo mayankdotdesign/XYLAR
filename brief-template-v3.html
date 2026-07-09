@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JioBlackRock Flexi Cap Fund — Xylar Private Report · v3</title>
+<style>
+/* ============================================================
+   XYLAR — FUND REPORT v3 · "smoked glass & machined metal"
+   Same content and engine as v2; only the material layer differs:
+   graphite smoked-glass cards, metallic gradient rims with a
+   cursor-tracked specular, film grain, and darkened rock-photo
+   backdrops in the divider/close statement moments.
+   Layer 1 · Design tokens
+   ============================================================ */
+@font-face{font-family:'Denton';src:url(data:font/otf;base64,%%DENTON_LIGHT%%) format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Denton';src:url(data:font/otf;base64,%%DENTON_LIGHT_ITALIC%%) format('opentype');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'Denton';src:url(data:font/otf;base64,%%DENTON_REGULAR%%) format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Denton';src:url(data:font/otf;base64,%%DENTON_REGULAR_ITALIC%%) format('opentype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Geist';src:url(data:font/ttf;base64,%%GEIST_VAR%%) format('truetype-variations');font-weight:100 900;font-style:normal;font-display:swap}
+
+:root{
+  --ground:#050505;
+  --surface-1:#0D0D0D;
+  --surface-2:#1B1B1B;
+  --muted:#575757;
+  --text-2:#B4B2B1;
+  --paper:#F9F9F9;
+  --paper-card:#FFFFFF;
+  --ink:#050505;
+  --white:#FFFFFF;
+  --beam-1:#D66001;
+  --beam-2:#F1F0A8;
+  --beam-3:#9FFFFB;
+  --beam-4:#4757EA;
+  --beam:linear-gradient(90deg,var(--beam-1) 0%,var(--beam-2) 34%,var(--beam-3) 66%,var(--beam-4) 100%);
+  /* smoked glass & machined metal */
+  --hairline:rgba(255,255,255,.06);
+  --glass-bg:linear-gradient(180deg,rgba(255,255,255,.062) 0%,rgba(255,255,255,.02) 30%,rgba(255,255,255,.008) 68%,rgba(255,255,255,.026) 100%);
+  --glass-border:rgba(255,255,255,.055);
+  --glass-shadow:0 34px 80px rgba(0,0,0,.55),0 3px 12px rgba(0,0,0,.42);
+  /* milled-aluminium rim: bright lit edge falling to dark, small kick at the base */
+  --metal-rim:linear-gradient(168deg,rgba(255,255,255,.40) 0%,rgba(255,255,255,.115) 22%,rgba(255,255,255,.05) 46%,rgba(255,255,255,.032) 72%,rgba(255,255,255,.15) 100%);
+  --metal-rim-ink:linear-gradient(168deg,rgba(5,5,5,.20) 0%,rgba(5,5,5,.075) 26%,rgba(5,5,5,.04) 52%,rgba(5,5,5,.035) 76%,rgba(5,5,5,.12) 100%);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --serif:'Denton',Georgia,serif;
+  --sans:'Geist',-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --dur:.9s;
+  --radius:14px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ground);color:var(--white);
+  font-family:var(--sans);font-size:15px;line-height:1.7;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;
+}
+@media(pointer:fine){body{cursor:none}body a,body button{cursor:none}}
+::selection{background:var(--beam-4);color:var(--white)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+@media(max-width:720px){.wrap{padding:0 24px}}
+sup{font-size:.55em;color:var(--muted)}
+
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+h1,h2{font-family:var(--serif);font-weight:300;letter-spacing:-.005em}
+h1 em,h2 em{font-style:italic;font-weight:300}
+.body-2{color:var(--text-2);font-size:15px;line-height:1.75}
+.fine{font-size:11px;line-height:1.8;color:var(--muted)}
+.fig-cap{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+/* reveal system */
+.rv{opacity:0;transform:translateY(26px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+/* masked line reveal for display type */
+.mask{display:block;overflow:hidden}
+.mask>span{display:block;transform:translateY(112%);transition:transform 1.1s var(--ease);transition-delay:var(--d,0s)}
+.in .mask>span,.mask.in>span{transform:none}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .mask>span{transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+.rule{height:1px;background:var(--hairline);border:0}
+
+/* ============================================================
+   Custom cursor
+   ============================================================ */
+#cursor{
+  position:fixed;top:0;left:0;width:32px;height:32px;border-radius:50%;
+  background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%) scale(1);
+  transition:opacity .3s;opacity:0;will-change:transform;
+}
+@media(pointer:coarse),(prefers-reduced-motion:reduce){#cursor{display:none}}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;font-weight:500;letter-spacing:.01em;
+  padding:12px 24px;border-radius:999px;text-decoration:none;
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);
+  border:1px solid transparent;white-space:nowrap;
+}
+.btn svg{width:13px;height:13px;flex:none}
+.btn-primary{background:linear-gradient(180deg,#FFFFFF 0%,#EBEBE8 100%);color:var(--ink)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(255,255,255,.1)}
+.btn-ghost{background:transparent;color:var(--white);border-color:rgba(255,255,255,.16)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.42)}
+.btn-hl{position:relative;background:var(--white);color:var(--ink)}
+.btn-hl::before{
+  content:'';position:absolute;inset:-3px;border-radius:999px;padding:1.2px;
+  background:var(--beam);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:.85;pointer-events:none;
+}
+
+/* ============================================================
+   Glass (smoked, metal-rimmed)
+   ============================================================ */
+.glass{
+  background:var(--glass-bg);
+  border-radius:var(--radius);
+  box-shadow:var(--glass-shadow);
+  backdrop-filter:blur(26px) saturate(1.18);
+  -webkit-backdrop-filter:blur(26px) saturate(1.18);
+  position:relative;
+}
+/* metallic rim: 1px machined edge; a soft specular follows the pointer
+   (--mx/--my set by the tilt engine; defaults leave a faint top light).
+   Elements that carry the beam ring (.eq-result, .f-out, .fstage.scored)
+   override this pseudo later in the sheet — the beam wins there. */
+.glass::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:
+    radial-gradient(240px circle at var(--mx,50%) var(--my,-30%),rgba(255,255,255,.5),transparent 62%),
+    var(--metal-rim);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+.glass::after{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  pointer-events:none;
+}
+/* film grain — one fixed page-wide pass, sits under the custom cursor */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
+  background:var(--grain);background-size:140px 140px;
+  opacity:.05;mix-blend-mode:overlay;
+}
+/* tilt cards */
+.tilt{transform-style:preserve-3d;transition:box-shadow .5s var(--ease);will-change:transform}
+.tilt .sheen{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.075),transparent 60%);
+  transition:opacity .5s var(--ease);
+}
+.tilt:hover .sheen{opacity:1}
+.glass.tilt:hover{box-shadow:0 46px 104px rgba(0,0,0,.62),0 4px 14px rgba(0,0,0,.46)}
+
+/* ============================================================
+   Nav
+   ============================================================ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);
+  background:rgba(5,5,5,.55);border-bottom:1px solid var(--hairline);
+}
+.nav-in{max-width:1200px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between}
+@media(max-width:720px){.nav-in{padding:16px 24px}}
+.logo svg{height:13px;width:auto;display:block}
+.nav-right{display:flex;align-items:center;gap:26px}
+.nav-tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+@media(max-width:720px){.nav-tag{display:none}}
+nav .btn{padding:9px 18px;font-size:12px}
+
+/* ============================================================
+   Cover
+   ============================================================ */
+.cover{
+  min-height:100vh;position:relative;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  padding:160px 24px 120px;overflow:hidden;
+}
+#coverCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cover-content{position:relative;z-index:2;max-width:1000px;transform:translateY(-5vh)}
+.cover .eyebrow{margin-bottom:34px}
+.cover h1{font-size:clamp(42px,5.8vw,84px);line-height:1.06;margin-bottom:28px}
+.cover-sub{max-width:540px;margin:0 auto 40px;color:var(--text-2);font-size:15px;line-height:1.8}
+.cover-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:54px}
+.cover-meta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.chip{
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+  color:var(--text-2);padding:8px 16px;border-radius:999px;
+  border:1px solid var(--hairline);background:rgba(255,255,255,.015);
+}
+.chip b{color:var(--white);font-weight:500}
+
+/* ============================================================
+   Contents (TOC)
+   ============================================================ */
+.toc-sec{padding:90px 0 40px}
+.toc{padding:40px 46px;display:grid;grid-template-columns:200px 1fr;gap:40px}
+@media(max-width:860px){.toc{grid-template-columns:1fr;padding:30px 26px}}
+.toc-list{display:grid;grid-template-columns:1fr 1fr;gap:0 44px;list-style:none;counter-reset:toc}
+@media(max-width:640px){.toc-list{grid-template-columns:1fr}}
+.toc-list a{
+  display:flex;align-items:baseline;gap:14px;padding:11px 2px;text-decoration:none;
+  color:var(--text-2);font-size:13.5px;border-bottom:1px solid var(--hairline);
+  transition:color .4s var(--ease),padding-left .4s var(--ease);
+}
+.toc-list a:hover{color:var(--white);padding-left:8px}
+.toc-list .n{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:12.5px;min-width:22px}
+
+/* ============================================================
+   Chapter scaffolding
+   ============================================================ */
+.ch{padding:130px 0}
+@media(max-width:720px){.ch{padding:88px 0}}
+.ch-head{max-width:760px;margin-bottom:64px}
+.ch-head .eyebrow{margin-bottom:22px;display:flex;align-items:center;gap:14px}
+.ch-head .eyebrow::after{content:'';height:1px;flex:1;max-width:80px;background:var(--hairline)}
+.ch-head h2{font-size:clamp(30px,3.9vw,50px);line-height:1.14;margin-bottom:18px}
+.ch-head .body-2{max-width:620px}
+.src{margin-top:30px}
+.edge-line{
+  margin-top:44px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  font-size:14px;color:var(--text-2);
+}
+.edge-line .tag{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--white);
+  padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+}
+
+/* dividers (p3 / p5) */
+.divider{padding:150px 0;text-align:center;position:relative;overflow:hidden}
+.divider h2{font-size:clamp(30px,4.6vw,58px);line-height:1.16;max-width:900px;margin:0 auto}
+.divider .eyebrow{margin-bottom:28px}
+.divider .body-2{max-width:560px;margin:24px auto 0}
+.divider .fine{max-width:720px;margin:40px auto 0}
+.div-dots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5}
+/* darkened rock-photo backdrop for the statement moments (dividers + close).
+   Baked dark in the asset; masked so it dissolves into the ground. */
+.photo-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:url('assets/img/rock.webp') center 28%/cover no-repeat;
+  opacity:.17;
+  -webkit-mask-image:radial-gradient(115% 95% at 50% 62%,#000 24%,transparent 78%);
+  mask-image:radial-gradient(115% 95% at 50% 62%,#000 24%,transparent 78%);
+}
+
+/* ============================================================
+   01 — Managers (two circles)
+   ============================================================ */
+.mgr{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative}
+@media(max-width:860px){.mgr{grid-template-columns:1fr}}
+.mgr-card{padding:52px 48px;text-align:center}
+@media(max-width:720px){.mgr-card{padding:36px 26px}}
+.mgr-card .ring{
+  width:76px;height:76px;margin:0 auto 26px;border-radius:50%;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.mgr-card .ring svg{position:absolute;inset:0;width:100%;height:100%}
+.mgr-card .ring i{font-style:normal;font-family:var(--serif);font-size:22px;color:var(--white)}
+.mgr-card h3{font-family:var(--serif);font-weight:300;font-size:28px;margin-bottom:6px}
+.mgr-card .role{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:28px}
+.mgr-card ul{list-style:none;text-align:left;max-width:400px;margin:0 auto}
+.mgr-card li{padding:13px 0;border-bottom:1px solid var(--hairline);color:var(--text-2);font-size:13.5px;line-height:1.65}
+.mgr-card li:last-child{border-bottom:0}
+.mgr-card li b{color:var(--white);font-weight:500}
+.mgr-link{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
+  width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-style:italic;font-size:16px;color:var(--text-2);
+}
+@media(max-width:860px){.mgr-link{display:none}}
+
+/* ============================================================
+   03 — SAE Venn
+   ============================================================ */
+.venn-wrap{display:grid;grid-template-columns:1.35fr 1fr;gap:60px;align-items:center}
+@media(max-width:1000px){.venn-wrap{grid-template-columns:1fr;gap:40px}}
+.venn{position:relative;width:100%;max-width:640px;margin:0 auto}
+.venn svg{display:block;width:100%;height:auto}
+.venn-tagline{text-align:center;margin-top:26px}
+.venn-tagline .t1{font-family:var(--serif);font-weight:300;font-size:22px}
+.venn-tagline .t2{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:8px}
+.why-list{list-style:none}
+.why-list li{
+  padding:20px 0;border-bottom:1px solid var(--hairline);
+  color:var(--text-2);font-size:14px;line-height:1.7;display:flex;gap:16px;
+}
+.why-list li:last-child{border-bottom:0}
+.why-list li::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:var(--white);flex:none;margin-top:9px;opacity:.7;
+}
+.why-list b{color:var(--white);font-weight:500}
+.why-head{font-family:var(--serif);font-weight:300;font-size:26px;margin-bottom:18px}
+.why-head em{font-style:italic}
+.powered{
+  margin-top:26px;padding-top:22px;border-top:1px solid var(--hairline);
+  font-size:13px;color:var(--text-2);
+}
+.powered b{color:var(--white);font-weight:500}
+
+/* ============================================================
+   SAE particle stage (kept from v1, captions re-sourced)
+   ============================================================ */
+.sae{height:380vh;position:relative}
+.sae-stage{position:sticky;top:0;height:100vh;overflow:hidden}
+#saeCanvas{position:absolute;inset:0;width:100%;height:100%}
+.sae-head{position:absolute;top:104px;left:0;right:0;z-index:3;text-align:center;pointer-events:none}
+.sae-head .eyebrow{margin-bottom:14px}
+.sae-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3.4vw,42px)}
+.sae-head h2 em{font-style:italic}
+.sae-captions{position:absolute;left:0;bottom:64px;right:0;z-index:3;pointer-events:none}
+.sae-cap{
+  position:absolute;bottom:0;left:40px;max-width:430px;
+  padding:26px 28px;opacity:0;transform:translateY(14px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+@media(max-width:720px){.sae-cap{left:24px;right:24px;max-width:none;padding:20px}}
+.sae-cap.on{opacity:1;transform:none}
+.sae-cap .n{font-family:var(--serif);font-style:italic;font-weight:300;color:var(--muted);font-size:13px;letter-spacing:.06em;margin-bottom:9px;display:block}
+.sae-cap h3{font-family:var(--serif);font-weight:300;font-size:22px;line-height:1.3;margin-bottom:9px}
+.sae-cap h3 em{font-style:italic}
+.sae-cap p{color:var(--text-2);font-size:13px;line-height:1.65}
+.sae-progress{position:absolute;right:44px;bottom:64px;z-index:3;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+@media(max-width:720px){.sae-progress{display:none}}
+.sae-progress span{font-size:10px;letter-spacing:.2em;color:var(--muted);font-weight:500;transition:color .4s}
+.sae-progress span.on{color:var(--white)}
+.sae-chip{
+  position:absolute;z-index:3;padding:8px 16px;border-radius:999px;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--white);
+  opacity:0;transform:translateY(8px) scale(.96);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
+  pointer-events:none;white-space:nowrap;
+}
+.sae-chip.on{opacity:1;transform:none}
+.sae-chip i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--beam);margin-right:8px;vertical-align:1px}
+
+/* beamed statement */
+.beam-stat{max-width:720px;margin:0 auto;text-align:center;padding:50px 24px;position:relative}
+.beam-stat::before,.beam-stat::after{content:'';position:absolute;left:0;right:0;height:1.5px;background:var(--beam);opacity:.8}
+.beam-stat::before{top:0}
+.beam-stat::after{bottom:0}
+.beam-stat p.big{font-family:var(--serif);font-weight:300;font-size:clamp(24px,3vw,36px);line-height:1.3}
+.beam-stat p.big em{font-style:italic}
+.beam-stat .sub{margin-top:14px;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+
+/* ============================================================
+   05 — Data overload equation
+   ============================================================ */
+.eq-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:56px;align-items:start}
+@media(max-width:1000px){.eq-grid{grid-template-columns:1fr;gap:40px}}
+.eq{display:flex;flex-direction:column;gap:0;align-items:center}
+.eq-item{width:100%;max-width:420px;display:flex;align-items:center;gap:18px;padding:18px 24px}
+.eq-item .doticon,.eq-result .doticon{width:38px;height:38px;flex:none}
+.eq-item .doticon svg,.eq-result .doticon svg{display:block;width:100%;height:100%}
+.eq-item span{font-size:14px;color:var(--text-2)}
+.eq-op{font-family:var(--serif);font-weight:300;font-size:24px;color:var(--muted);padding:8px 0;font-style:italic}
+.eq-result{
+  width:100%;max-width:420px;display:flex;align-items:center;gap:18px;padding:20px 24px;
+  position:relative;
+}
+.eq-result::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:var(--beam);opacity:.55;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.eq-result span{font-size:14.5px;color:var(--white);font-weight:500}
+.eq-rail{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:22px;text-align:center}
+.note-card{padding:26px 28px;margin-bottom:14px}
+.note-card h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:10px}
+.note-card p{font-size:13.5px;color:var(--text-2);line-height:1.7}
+.note-card.gaps h4{color:var(--beam-1)}
+.note-card.edge h4{color:var(--beam-3)}
+
+/* ============================================================
+   06 — Traditional vs alternative hubs
+   ============================================================ */
+.hubs{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:stretch}
+@media(max-width:960px){.hubs{grid-template-columns:1fr}}
+.hub-panel{padding:44px 36px;display:flex;flex-direction:column;align-items:center}
+.hub-panel .fig-cap{margin-bottom:34px}
+.hub{position:relative;width:100%;max-width:420px}
+.hub svg{display:block;width:100%;height:auto}
+.hub-tagband{margin-top:30px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+.hub-tagband.comp{color:var(--white)}
+.hub-notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:960px){.hub-notes{grid-template-columns:1fr}}
+
+/* ============================================================
+   Light interlude — exhibits
+   ============================================================ */
+.light{background:var(--paper);color:var(--ink);position:relative}
+.light .eyebrow{color:#8b8b8b}
+.light .body-2{color:#5c5c5c}
+.light .fine{color:#9a9a9a}
+.light .fig-cap{color:#8b8b8b}
+.light .ch-head .eyebrow::after{background:rgba(5,5,5,.1)}
+.light .edge-line{color:#5c5c5c}
+.light .edge-line .tag{color:var(--ink);border-color:rgba(5,5,5,.16)}
+#exDots{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
+.light .wrap{position:relative;z-index:2}
+.paper-card{
+  background:linear-gradient(180deg,#FFFFFF 0%,#FDFDFC 70%,#F7F7F5 100%);border-radius:var(--radius);
+  padding:36px 36px 30px;box-shadow:0 28px 60px rgba(5,5,5,.07),0 2px 8px rgba(5,5,5,.035);
+  display:flex;flex-direction:column;position:relative;
+}
+/* ink-side machined rim for the light exhibits */
+.paper-card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:var(--metal-rim-ink);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+.paper-card::after{
+  content:'';position:absolute;top:1px;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
+  pointer-events:none;
+}
+@media(max-width:720px){.paper-card{padding:24px 20px}}
+.paper-card h3{font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.22;margin-bottom:6px}
+.paper-card h3 em{font-style:italic}
+.paper-card .cap{color:#7a7a7a;font-size:13px;line-height:1.65;margin-bottom:26px;max-width:460px}
+.paper-card .chart-note{margin-top:auto;padding-top:20px;font-size:11px;color:#9a9a9a;line-height:1.7}
+.ex-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:1024px){.ex-grid{grid-template-columns:1fr}}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+.legend span{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:#7a7a7a;font-weight:500}
+.legend i{width:14px;height:2.5px;border-radius:2px;display:inline-block}
+.lc svg,.bc svg{display:block;width:100%;height:auto}
+
+/* heatmap */
+.hm{width:100%;overflow-x:auto}
+.hm-grid{display:grid;grid-template-columns:76px repeat(5,minmax(76px,1fr));gap:4px;min-width:560px}
+.hm-h{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b8b8b;font-weight:500;padding:4px 4px 10px;text-align:center}
+.hm-y{font-size:11px;color:#8b8b8b;font-weight:500;display:flex;align-items:center;font-variant-numeric:tabular-nums}
+.hm-c{
+  border-radius:6px;padding:10px 4px;text-align:center;
+  font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;
+  transition:transform .3s var(--ease);position:relative;
+  opacity:0;transform:scale(.9);
+}
+.hm.in .hm-c{opacity:1;transform:none;transition:opacity .6s var(--ease) var(--hd,0s),transform .6s var(--ease) var(--hd,0s)}
+.hm-c:hover{transform:scale(1.05)!important;z-index:2}
+.hm-scale{display:flex;align-items:center;gap:12px;margin-top:20px}
+.hm-scale .bar{flex:1;max-width:220px;height:4px;border-radius:2px}
+.hm-scale span{font-size:10.5px;color:#9a9a9a;font-weight:500}
+
+/* ============================================================
+   09 — Why cards (p10)
+   ============================================================ */
+.why-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:960px){.why-cards{grid-template-columns:1fr}}
+.wc{padding:38px 34px;display:flex;flex-direction:column}
+.wc .doticon{width:44px;height:44px;margin-bottom:26px}
+.wc .doticon svg{display:block;width:100%;height:100%}
+.wc h3{font-family:var(--serif);font-weight:300;font-size:23px;line-height:1.25;margin-bottom:20px}
+.wc h3 em{font-style:italic}
+.wc ul{list-style:none}
+.wc li{padding:11px 0;border-bottom:1px solid var(--hairline);color:var(--text-2);font-size:13.5px;line-height:1.65}
+.wc li:last-child{border-bottom:0}
+.wc li b{color:var(--white);font-weight:500}
+
+/* ============================================================
+   10 — Aladdin radial
+   ============================================================ */
+.alad{display:grid;grid-template-columns:1fr 1.3fr .8fr;gap:44px;align-items:center}
+@media(max-width:1080px){.alad{grid-template-columns:1fr 1fr}.alad-stats{grid-column:1/-1;flex-direction:row!important;flex-wrap:wrap}}
+@media(max-width:760px){.alad{grid-template-columns:1fr}}
+.alad-left h3{font-family:var(--serif);font-weight:300;font-size:24px;margin-bottom:18px}
+.alad-left h3 em{font-style:italic}
+.alad-radial{position:relative;max-width:520px;margin:0 auto;width:100%}
+.alad-radial svg{display:block;width:100%;height:auto}
+.alad-stats{display:flex;flex-direction:column;gap:0}
+.astat{padding:24px 0;border-bottom:1px solid var(--hairline);flex:1;min-width:180px}
+.astat:last-child{border-bottom:0}
+.astat .k{font-family:var(--serif);font-weight:300;font-size:clamp(32px,3vw,42px);line-height:1}
+.astat .l{color:var(--text-2);font-size:12.5px;line-height:1.6;margin-top:10px}
+
+/* ============================================================
+   11 — Funnel (p12)
+   ============================================================ */
+.funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin-bottom:14px}
+@media(max-width:960px){.funnel{grid-template-columns:1fr}}
+.fstage{padding:26px 22px;position:relative}
+.fstage .fn{font-family:var(--serif);font-style:italic;font-weight:300;font-size:13px;color:var(--muted);display:block;margin-bottom:14px}
+.fstage h4{font-size:13.5px;font-weight:500;letter-spacing:.01em;margin-bottom:8px;line-height:1.4}
+.fstage p{font-size:12px;color:var(--text-2);line-height:1.6}
+.fstage .fdots{margin-top:18px;height:40px}
+.fstage .fdots svg{display:block;height:100%;width:auto}
+.fstage.scored::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:var(--beam);opacity:.5;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.f-engine{display:grid;grid-template-columns:1.1fr 2fr;gap:10px;align-items:stretch}
+@media(max-width:960px){.f-engine{grid-template-columns:1fr}}
+.f-out{
+  padding:34px 28px;display:flex;flex-direction:column;justify-content:center;text-align:center;position:relative;overflow:hidden;
+}
+.f-out::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1.2px;background:var(--beam);opacity:.7;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.f-out .fig-cap{margin-bottom:12px}
+.f-out h4{font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.25}
+.f-eng-in{padding:28px;display:flex;flex-direction:column}
+.f-eng-in h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--white);margin-bottom:18px}
+.f-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:680px){.f-inputs{grid-template-columns:1fr}}
+.f-in{border:1px solid var(--hairline);border-radius:10px;padding:16px 16px}
+.f-in h5{font-size:12.5px;font-weight:500;margin-bottom:6px}
+.f-in p{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ============================================================
+   Close + footer
+   ============================================================ */
+.close-sec{text-align:center;padding:170px 0 140px;position:relative;overflow:hidden}
+.close-sec h2{font-size:clamp(34px,5vw,66px);line-height:1.1;margin-bottom:24px}
+.close-sec .body-2{max-width:480px;margin:0 auto 44px}
+.close-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+footer{border-top:1px solid var(--hairline);padding:80px 0 60px}
+.f-lockup{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:56px}
+.f-lockup svg{height:18px;width:auto}
+.f-lockup .private{font-family:var(--serif);font-weight:300;font-size:12px;letter-spacing:.5em;text-transform:uppercase;color:var(--text-2);margin-left:.5em}
+.f-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:48px}
+@media(max-width:860px){.f-cols{grid-template-columns:1fr}}
+.f-cols h4{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:16px}
+.f-bottom{border-top:1px solid var(--hairline);padding-top:28px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.f-bottom span{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#top" aria-label="Xylar">
+      <svg viewBox="0 0 1662 223" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M142.246 156.388L69.4856 222.792H4.05148L110.972 125.213C117.937 118.864 117.937 107.754 110.972 101.377L0 0H65.4341L142.273 70.2018C167.443 93.1868 167.415 133.432 142.273 156.388H142.246Z" fill="#FBFAF8"/><path d="M191.936 70.2019L268.775 0H334.209L223.237 101.406C216.272 107.754 216.272 118.893 223.237 125.241L330.158 222.821H264.723L191.963 156.417C166.794 133.432 166.767 93.2151 191.963 70.2302L191.936 70.2019Z" fill="#FBFAF8"/><path d="M533.722 222.792H489.794V140.149C489.794 128.132 484.772 116.682 476.003 108.661L357.039 0H422.473L505.029 75.4734C523.788 92.62 534.416 117.164 534.249 142.869L533.722 222.792Z" fill="#FBFAF8"/><path d="M538.113 97.1829C533.007 88.0286 534.866 76.4653 542.58 69.465L618.809 0H684.271L571.745 102.795C561.339 112.289 545.022 109.568 538.14 97.1829H538.113Z" fill="#FBFAF8"/><path d="M716.068 155.963V0H759.691V155.963C759.691 168.065 769.348 177.928 781.197 177.928H938.994V222.792H781.197C745.344 222.792 716.068 192.552 716.068 155.963Z" fill="#FBFAF8"/><path d="M1012.48 222.792H962L1080.1 21.6529C1087.6 8.92757 1101.61 0 1117.51 0H1136.19C1152.09 0 1166.1 8.92757 1173.59 21.6529L1291.7 222.792H1241.22L1141.01 52.7435C1138.02 47.6704 1132.66 44.5528 1126.86 44.5528C1121.06 44.5528 1115.68 47.642 1112.71 52.7435L1012.5 222.792H1012.48Z" fill="#FBFAF8"/><path d="M1625.85 222.784H1573.52L1535.78 161.595C1533.61 158.081 1529.84 155.955 1525.76 155.955H1384.15V111.402H1527.76C1546.21 111.402 1563.39 121.095 1573.18 137.08L1582.51 152.242L1625.85 222.784Z" fill="#FBFAF8"/><path d="M1626.8 66.8576V89.134C1626.8 111.609 1616.39 132.468 1599.74 144.173L1576.15 105.77C1580.62 101.689 1583.48 95.7942 1583.48 89.134V66.8576C1583.48 54.614 1573.66 44.5812 1561.67 44.5812H1384.15V0H1561.36C1597.49 0 1626.8 29.9286 1626.8 66.8292V66.8576Z" fill="#FBFAF8"/><path d="M1344.51 0H1300.86V222.764H1344.51V0Z" fill="#FBFAF8"/></svg>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tag">Private &middot; Fund Report</span>
+      <a class="btn btn-primary" href="#close">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        Schedule a Call
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ COVER ============ -->
+<header class="cover" id="top">
+  <canvas id="coverCanvas"></canvas>
+  <div class="cover-content">
+    <p class="eyebrow rv">Xylar Private &nbsp;&middot;&nbsp; Fund Report № 001 &nbsp;&middot;&nbsp; October 2025</p>
+    <h1>
+      <span class="mask rv"><span>Powered by AI.</span></span>
+      <span class="mask rv" style="--d:.12s"><span><em>Managed by experts.</em></span></span>
+    </h1>
+    <p class="cover-sub rv" style="--d:.2s" id="coverSub"></p>
+    <div class="cover-ctas rv" style="--d:.28s">
+      <a class="btn btn-primary" href="#contents">Read the Report</a>
+      <a class="btn btn-ghost" href="#close">Schedule a Call</a>
+    </div>
+    <div class="cover-meta rv" style="--d:.36s" id="coverMeta"></div>
+  </div>
+</header>
+
+<!-- ============ CONTENTS ============ -->
+<section class="toc-sec" id="contents">
+  <div class="wrap">
+    <div class="toc glass rv">
+      <div>
+        <p class="eyebrow" style="margin-bottom:14px">Contents</p>
+        <p class="fine">A report on the JioBlackRock Flexi Cap Fund, prepared in the Xylar format. Content and figures as published by JioBlackRock AMC, September 2025.</p>
+      </div>
+      <ol class="toc-list" id="tocList"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 · MANAGERS ============ -->
+<section class="ch" id="ch1">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">01 &middot; The Managers</p>
+      <h2 class="rv" style="--d:.08s">We bring together the capabilities of the world's largest asset manager<sup>1</sup> and India's strongest <em>brand.</em><sup>2</sup></h2>
+    </div>
+    <div class="mgr">
+      <div class="mgr-card glass tilt rv"><div class="sheen"></div>
+        <div class="ring" data-ring="plain"><i>J</i></div>
+        <h3>Jio Financial Services<sup>3</sup></h3>
+        <p class="role">Sponsor &middot; India</p>
+        <ul id="jioList"></ul>
+      </div>
+      <div class="mgr-link glass">&amp;</div>
+      <div class="mgr-card glass tilt rv" style="--d:.1s"><div class="sheen"></div>
+        <div class="ring" data-ring="plain"><i>B</i></div>
+        <h3>BlackRock<sup>3</sup></h3>
+        <p class="role">Sponsor &middot; Global</p>
+        <ul id="brList"></ul>
+      </div>
+    </div>
+    <p class="fine src rv" id="mgrSrc"></p>
+  </div>
+</section>
+
+<!-- ============ 02 · THESIS DIVIDER ============ -->
+<section class="divider" id="ch2">
+  <div class="photo-bg"></div>
+  <canvas class="div-dots" data-dots></canvas>
+  <div class="wrap" style="position:relative;z-index:2">
+    <p class="eyebrow rv">02 &middot; The Fund</p>
+    <h2>
+      <span class="mask rv"><span>Cutting through the noise —</span></span>
+      <span class="mask rv" style="--d:.12s"><span>a smarter way to <em>invest.</em></span></span>
+    </h2>
+    <p class="body-2 rv" style="--d:.2s">JioBlackRock Flexi Cap Fund. Powered by the Systematic Active Equity* (SAE) approach. Investing, evolved.</p>
+    <p class="fine rv" style="--d:.26s">*The systematic approach involves utilizing inputs from the Fund Managers and signal research scores shared by BlackRock Inc. Such signal research scores are derived using big data (which includes traditional data and alternative data), and leverages machine learning, a form of artificial intelligence and advanced data analytics, which are constantly being improved. Signals are selected based on their economic rationale and demonstrated statistical relevance.</p>
+  </div>
+</section>
+
+<!-- ============ 03 · SAE VENN ============ -->
+<section class="ch" id="ch3">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">03 &middot; The Approach</p>
+      <h2 class="rv" style="--d:.08s">So, what is Systematic Active Equity <em>(SAE)?</em></h2>
+      <p class="body-2 rv" style="--d:.16s">A technology-driven* investment approach that combines human expertise with a data-driven model to build a portfolio.</p>
+    </div>
+    <div class="venn-wrap">
+      <div class="rv">
+        <div class="venn" id="venn"></div>
+        <div class="venn-tagline">
+          <p class="t1">Systematic Active <em style="font-style:italic">Equity</em></p>
+          <p class="t2">Sharpen insights &middot; Smarter decisions &middot; Bigger wins</p>
+        </div>
+      </div>
+      <div class="rv" style="--d:.12s">
+        <h3 class="why-head">Why does this matter to <em>you?</em></h3>
+        <ul class="why-list" id="whyList"></ul>
+        <p class="powered">Investment expertise, <b>powered by technology.</b></p>
+      </div>
+    </div>
+    <p class="fine src rv">*The systematic approach involves utilizing inputs from the Fund Managers and signal research scores shared by BlackRock Inc.</p>
+  </div>
+</section>
+
+<!-- ============ SAE PARTICLE FIGURE ============ -->
+<section class="sae" id="saefig">
+  <div class="sae-stage">
+    <canvas id="saeCanvas"></canvas>
+    <div class="sae-head">
+      <p class="eyebrow">Figure 03 &middot; Signal formation under SAE</p>
+      <h2>From data, <em>decision.</em></h2>
+    </div>
+    <div class="sae-captions" id="saeCaptions"></div>
+    <div class="sae-progress" id="saeProgress">
+      <span data-i="0">01 — Data</span>
+      <span data-i="1">02 — Signal</span>
+      <span data-i="2">03 — Decision</span>
+    </div>
+    <div class="sae-chip glass" id="saeChip"><i></i>Signal captured</div>
+  </div>
+</section>
+
+<section class="ch" style="padding-top:40px">
+  <div class="wrap">
+    <div class="beam-stat rv">
+      <p class="big">Investment expertise,<br><em>powered by technology.</em></p>
+      <p class="sub">Sharpen insights &middot; Smarter decisions &middot; Bigger wins</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 · CHALLENGES DIVIDER ============ -->
+<section class="divider" id="ch4" style="padding:130px 0">
+  <div class="photo-bg"></div>
+  <canvas class="div-dots" data-dots></canvas>
+  <div class="wrap" style="position:relative;z-index:2">
+    <p class="eyebrow rv">04 &middot; The Challenges</p>
+    <h2>
+      <span class="mask rv"><span>Challenges in today's equity investing</span></span>
+      <span class="mask rv" style="--d:.12s"><span>approach — and how we aim to <em>address them.</em></span></span>
+    </h2>
+  </div>
+</section>
+
+<!-- ============ 05 · DATA OVERLOAD ============ -->
+<section class="ch" id="ch5" style="padding-top:60px">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">05 &middot; Challenge I</p>
+      <h2 class="rv" style="--d:.08s">Data is everywhere, but insight requires skill and <em>technology.</em></h2>
+    </div>
+    <div class="eq-grid">
+      <div class="rv">
+        <p class="eq-rail">Raw data &amp; information overload</p>
+        <div class="eq" id="eqStack"></div>
+      </div>
+      <div class="rv" style="--d:.12s">
+        <h3 class="why-head" style="font-size:23px">The problem isn't lack of information — <em>it's too much, too fast.</em></h3>
+        <div class="note-card glass gaps"><h4>Gaps</h4><p id="gapsP5"></p></div>
+        <div class="note-card glass edge"><h4>Our edge</h4><p id="edgeP5"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 · TRADITIONAL VS ALTERNATIVE ============ -->
+<section class="ch" id="ch6">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">06 &middot; Challenge II</p>
+      <h2 class="rv" style="--d:.08s">Traditional data sees only part of the <em>picture.</em></h2>
+      <p class="body-2 rv" style="--d:.16s">Today's world has an increasingly large number of usable data sources.</p>
+    </div>
+    <div class="hubs">
+      <div class="hub-panel glass tilt rv"><div class="sheen"></div>
+        <p class="fig-cap">Traditional approach</p>
+        <div class="hub" id="hubTrad"></div>
+        <p class="hub-tagband">Sees only part of the picture</p>
+      </div>
+      <div class="hub-panel glass tilt rv" style="--d:.1s"><div class="sheen"></div>
+        <p class="fig-cap">Modern approach</p>
+        <div class="hub" id="hubAlt"></div>
+        <p class="hub-tagband comp">Comprehensive</p>
+      </div>
+    </div>
+    <div class="hub-notes">
+      <div class="note-card glass gaps rv"><h4>Gaps</h4><p id="gapsP6"></p></div>
+      <div class="note-card glass edge rv" style="--d:.08s"><h4>Our edge</h4><p id="edgeP6"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIGHT INTERLUDE · EXHIBITS (07 + 08) ============ -->
+<section class="light" id="ch7" style="border-radius:28px 28px 0 0">
+  <canvas id="exDots"></canvas>
+  <div class="wrap" style="padding-top:130px;padding-bottom:130px">
+    <div class="ch-head">
+      <p class="eyebrow rv">07 &middot; Challenge III &nbsp;&middot;&nbsp; Exhibits</p>
+      <h2 class="rv" style="--d:.08s">More opportunities, less <em>coverage.</em></h2>
+      <p class="body-2 rv" style="--d:.16s">The number of listed companies in India has grown in the last decade: it is harder for manual research to keep pace.</p>
+    </div>
+    <div class="ex-grid">
+      <div class="paper-card rv">
+        <p class="fig-cap" style="margin-bottom:14px">Exhibit A</p>
+        <h3>Average daily turnover of <em>listed companies</em></h3>
+        <p class="cap">Number of stocks with average daily volume greater than —</p>
+        <div class="legend" id="lcLegend"></div>
+        <div class="lc" id="lineChart"></div>
+        <p class="chart-note">Source: Bloomberg. Monthly, Jan-14 – Jul-25. Redrawn from the source presentation; series shapes illustrative.</p>
+      </div>
+      <div class="paper-card rv" style="--d:.1s">
+        <p class="fig-cap" style="margin-bottom:14px">Exhibit B</p>
+        <h3>Nifty 500 stocks under <em>analyst coverage</em></h3>
+        <p class="cap">Coverage has plateaued near 470 names for a decade.</p>
+        <div class="bc" id="barChart"></div>
+        <p class="chart-note">Source: Bloomberg. Follows FY calendar, 2005–2025.</p>
+      </div>
+    </div>
+    <div class="edge-line rv"><span class="tag">Our edge</span><span>SAE approach enables coverage at scale, even in low-analyst segments.</span></div>
+
+    <div style="height:110px"></div>
+
+    <div class="ch-head">
+      <p class="eyebrow rv">08 &middot; Challenge IV</p>
+      <h2 class="rv" style="--d:.08s">Behavioural biases can cloud <em>judgement.</em></h2>
+      <p class="body-2 rv" style="--d:.16s">Decision-making is often swayed by confirmation bias, overconfidence, or recent events. This can lead to inconsistency in portfolio positions.</p>
+    </div>
+    <div class="paper-card rv">
+      <p class="fig-cap" style="margin-bottom:14px">Exhibit C</p>
+      <h3>Calendar-year factor returns, <em>India</em></h3>
+      <p class="cap">Long-only factor portfolios, absolute calendar-year performance. Style leadership rotates almost every year.</p>
+      <div class="hm"><div class="hm-grid" id="heatmap"></div></div>
+      <div class="hm-scale">
+        <span id="hmMin"></span>
+        <div class="bar" id="hmScaleBar"></div>
+        <span id="hmMax"></span>
+      </div>
+      <p class="chart-note" id="hmNote"></p>
+    </div>
+    <div class="edge-line rv"><span class="tag">Our edge</span><span>Rules-based SAE approach reduces subjectivity and emotional bias.</span></div>
+  </div>
+</section>
+
+<!-- ============ 09 · WHY THE FUND ============ -->
+<section class="ch" id="ch9">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">09 &middot; The Case</p>
+      <h2 class="rv" style="--d:.08s">Why JioBlackRock Flexi Cap <em>Fund?</em></h2>
+    </div>
+    <div class="why-cards" id="whyCards"></div>
+    <p class="fine src rv">Aladdin&reg; is BlackRock's proprietary platform which is licensed to the JioBlackRock AMC.</p>
+  </div>
+</section>
+
+<!-- ============ 10 · ALADDIN ============ -->
+<section class="ch" id="ch10">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">10 &middot; The Platform</p>
+      <h2 class="rv" style="--d:.08s">We will leverage Aladdin&reg;<sup>4</sup>, BlackRock's technology platform that unifies the end-to-end investment management <em>process.</em></h2>
+    </div>
+    <div class="alad">
+      <div class="alad-left rv">
+        <h3>Why does this matter to <em>you?</em></h3>
+        <p class="body-2" style="font-size:13.5px;margin-bottom:20px">Provides a common data language to enable scale, provide insights, and support sustainable business growth.</p>
+        <ul class="why-list" id="aladWhy" style="font-size:13px"></ul>
+      </div>
+      <div class="alad-radial rv" style="--d:.1s" id="aladRadial"></div>
+      <div class="alad-stats rv" style="--d:.18s" id="aladStats"></div>
+    </div>
+    <p class="fine src rv" id="aladSrc"></p>
+  </div>
+</section>
+
+<!-- ============ 11 · FUNNEL ============ -->
+<section class="ch" id="ch11">
+  <div class="wrap">
+    <div class="ch-head">
+      <p class="eyebrow rv">11 &middot; The Construction</p>
+      <h2 class="rv" style="--d:.08s">Stock selection, from universe to <em>portfolio.</em></h2>
+    </div>
+    <div class="funnel" id="funnelStages"></div>
+    <div class="f-engine">
+      <div class="f-out glass rv">
+        <p class="fig-cap">The outcome</p>
+        <h4>JioBlackRock<br><em>Flexi Cap Fund</em></h4>
+      </div>
+      <div class="f-eng-in glass rv" style="--d:.08s">
+        <h4>Aladdin&reg; optimization engine</h4>
+        <div class="f-inputs" id="fInputs"></div>
+      </div>
+    </div>
+    <p class="fine src rv">Aladdin&reg; is BlackRock's proprietary platform which is licensed to the JioBlackRock AMC.</p>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="close-sec" id="close">
+  <div class="photo-bg"></div>
+  <canvas class="div-dots" data-dots></canvas>
+  <div class="wrap" style="position:relative;z-index:2">
+    <p class="eyebrow rv" style="margin-bottom:30px">12 &middot; The Allocation Window</p>
+    <h2>
+      <span class="mask rv"><span>NFO period: 23<sup style="font-size:.4em">rd</sup> Sep –</span></span>
+      <span class="mask rv" style="--d:.12s"><span>7<sup style="font-size:.4em">th</sup> Oct <em>2025.</em></span></span>
+    </h2>
+    <p class="body-2 rv" style="--d:.2s">Speak with your Xylar advisor about the JioBlackRock Flexi Cap Fund. No exit load.</p>
+    <div class="close-ctas rv" style="--d:.28s">
+      <a class="btn btn-hl" href="#">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        Schedule a Call
+      </a>
+      <a class="btn btn-ghost" href="#">Request the Source Deck</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="f-lockup rv">
+      <svg viewBox="0 0 1662 223" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M142.246 156.388L69.4856 222.792H4.05148L110.972 125.213C117.937 118.864 117.937 107.754 110.972 101.377L0 0H65.4341L142.273 70.2018C167.443 93.1868 167.415 133.432 142.273 156.388H142.246Z" fill="#FBFAF8"/><path d="M191.936 70.2019L268.775 0H334.209L223.237 101.406C216.272 107.754 216.272 118.893 223.237 125.241L330.158 222.821H264.723L191.963 156.417C166.794 133.432 166.767 93.2151 191.963 70.2302L191.936 70.2019Z" fill="#FBFAF8"/><path d="M533.722 222.792H489.794V140.149C489.794 128.132 484.772 116.682 476.003 108.661L357.039 0H422.473L505.029 75.4734C523.788 92.62 534.416 117.164 534.249 142.869L533.722 222.792Z" fill="#FBFAF8"/><path d="M538.113 97.1829C533.007 88.0286 534.866 76.4653 542.58 69.465L618.809 0H684.271L571.745 102.795C561.339 112.289 545.022 109.568 538.14 97.1829H538.113Z" fill="#FBFAF8"/><path d="M716.068 155.963V0H759.691V155.963C759.691 168.065 769.348 177.928 781.197 177.928H938.994V222.792H781.197C745.344 222.792 716.068 192.552 716.068 155.963Z" fill="#FBFAF8"/><path d="M1012.48 222.792H962L1080.1 21.6529C1087.6 8.92757 1101.61 0 1117.51 0H1136.19C1152.09 0 1166.1 8.92757 1173.59 21.6529L1291.7 222.792H1241.22L1141.01 52.7435C1138.02 47.6704 1132.66 44.5528 1126.86 44.5528C1121.06 44.5528 1115.68 47.642 1112.71 52.7435L1012.5 222.792H1012.48Z" fill="#FBFAF8"/><path d="M1625.85 222.784H1573.52L1535.78 161.595C1533.61 158.081 1529.84 155.955 1525.76 155.955H1384.15V111.402H1527.76C1546.21 111.402 1563.39 121.095 1573.18 137.08L1582.51 152.242L1625.85 222.784Z" fill="#FBFAF8"/><path d="M1626.8 66.8576V89.134C1626.8 111.609 1616.39 132.468 1599.74 144.173L1576.15 105.77C1580.62 101.689 1583.48 95.7942 1583.48 89.134V66.8576C1583.48 54.614 1573.66 44.5812 1561.67 44.5812H1384.15V0H1561.36C1597.49 0 1626.8 29.9286 1626.8 66.8292V66.8576Z" fill="#FBFAF8"/><path d="M1344.51 0H1300.86V222.764H1344.51V0Z" fill="#FBFAF8"/></svg>
+      <span class="private">Private</span>
+    </div>
+    <div class="f-cols rv">
+      <div><h4>Sources &amp; footnotes</h4><p class="fine" id="footSources"></p></div>
+      <div><h4>Disclosures</h4><p class="fine" id="footDisclosures"></p></div>
+    </div>
+    <div class="f-bottom rv">
+      <span>&copy; 2025 Xylar Private. All rights reserved.</span>
+      <span>Fund Report № 001 &middot; October 2025</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script>
+/* ============================================================
+   Layer 2 · DATA — per-issue content (PDF-sourced)
+   ============================================================ */
+const DATA = {
+  cover: {
+    sub: "JioBlackRock Flexi Cap Fund &middot; NFO period: 23rd Sep – 7th Oct 2025. Jio BlackRock Asset Management Private Limited (JioBlackRock AMC).",
+    meta: [
+      { k: "NFO", v: "23 Sep — 07 Oct 2025" },
+      { k: "Category", v: "Flexi Cap" },
+      { k: "Approach", v: "Systematic Active Equity" },
+      { k: "Exit Load", v: "Nil" }
+    ]
+  },
+  toc: [
+    ["ch1","The managers"],["ch2","The fund"],["ch3","Systematic Active Equity"],
+    ["ch4","The challenges"],["ch5","Data overload"],["ch6","Traditional vs alternative data"],
+    ["ch7","Coverage &amp; bias exhibits"],["ch9","Why Flexi Cap"],["ch10","The Aladdin platform"],
+    ["ch11","Universe to portfolio"],["close","Allocation window"]
+  ],
+  managers: {
+    jio: [
+      "<b>Spun-off from Reliance Industries Ltd</b> to digitize financial services and to democratize financial access for <b>1.44B Indians</b><sup>4</sup>",
+      "<b>Jio Finance App</b> offers integrated financial services by providing a digital-led client centric platform",
+      "<b>$21.3B market capitalization</b><sup>5</sup>, trusted by more than 5 million shareholders and <b>7 million app users</b>"
+    ],
+    blackrock: [
+      "<b>$12.5T in AUM</b><sup>6</sup> globally across asset classes and geographies",
+      "<b>$336Bn</b><sup>7</sup> AUM across equities, fixed income, and alternatives managed under systematic",
+      "<b>40 years</b><sup>8</sup> of experience in Systematic Investing"
+    ],
+    src: "(1) As of 31st March 2025, BlackRock Financials, ADV Ratings (2) Jio (3) Jio Financial Services Ltd and BlackRock Financial Management Inc. (wholly owned subsidiary of BlackRock Inc.) are the sponsors for the JioBlackRock Mutual Fund (4) World Bank 2023 data (5) As of 30th May 2025, Bloomberg (6) As of 30th June 2025 – Q2 Report BlackRock (7) &amp; (8) Systematic Investing | BlackRock."
+  },
+  venn: {
+    human: ["Fundamental research","Theme definition","Fund manager views","Risk management","Governance insights"],
+    machine: ["AI and machine learning","Alternative data","Geolocations","Online search activity","Macro trends","Broker reports","Consumer transactions"],
+    why: [
+      "Aims to <b>measure data quickly and accurately</b>, using real-time information to <b>turn everyday market signals</b> into <b>actionable investment insights</b>.",
+      "Built to carefully <b>balance risk</b> and <b>potential returns</b>. By managing costs and controlling risks, it <b>aims to deliver</b> steady and efficient <b>investment outcomes</b> over time.",
+      "Portfolio positions sized by <b>disciplined risk budgeting and optimization processes</b>."
+    ]
+  },
+  sae: {
+    captions: [
+      { n: "01 — Data", h: "The problem isn't lack of information — <em>it's too much, too fast.</em>", p: "Multiple data streams like market, news, sentiment and macros can overwhelm analysis capacity." },
+      { n: "02 — Signal", h: "Signals, selected on <em>demonstrated relevance.</em>", p: "Signal research scores are derived using big data — traditional and alternative — and machine learning. Signals are selected on economic rationale and demonstrated statistical relevance." },
+      { n: "03 — Decision", h: "Positions sized by <em>disciplined risk budgeting.</em>", p: "Fund manager inputs meet the Aladdin® optimization engine — portfolio positions sized by disciplined risk budgeting and optimization processes." }
+    ],
+    chip: "Signal captured"
+  },
+  ch5: {
+    sources: ["Financial statements","News &amp; media","Social media","Macro indicators"],
+    result: "Actionable insights",
+    gaps: "Multiple data streams like market, news, sentiment, macros can overwhelm analysis capacity.",
+    edge: "SAE approach helps convert raw data into actionable insights by filtering out the noise."
+  },
+  ch6: {
+    trad: ["Financial services","Quarterly reports","Earnings call"],
+    alt: ["Blogs","Job postings","E-commerce data","Satellite data","Social media content","Internet search"],
+    gaps: "Traditional data might overlook smaller or less obvious signals that still carry useful insights.",
+    edge: "SAE integrates alternative data into clear investment insights."
+  },
+  exhibits: {
+    turnover: {
+      /* anchor points [yearFraction, value] — redrawn from source chart */
+      series: [
+        { label: "50 L",  color: "#D66001", anchors: [[2014,165],[2015,205],[2016,205],[2017,265],[2018,295],[2019,245],[2020,265],[2021,395],[2021.8,430],[2022.5,385],[2023,330],[2024,435],[2024.6,455],[2025,430],[2025.5,440]] },
+        { label: "1 Cr",  color: "#2AA6A0", anchors: [[2014,295],[2015,370],[2016,335],[2017,440],[2018,505],[2019,405],[2020,435],[2021,700],[2021.8,795],[2022.5,700],[2023,565],[2024,760],[2024.6,820],[2025,690],[2025.5,760]] },
+        { label: "1.5 Cr",color: "#4757EA", anchors: [[2014,365],[2015,485],[2016,425],[2017,560],[2018,650],[2019,520],[2020,565],[2020.8,795],[2021.5,935],[2022,830],[2022.8,745],[2023.5,700],[2024,905],[2024.6,1030],[2025,905],[2025.5,950]] }
+      ],
+      xStart: 2014, xEnd: 2025.58, yMax: 1200
+    },
+    coverage: {
+      years: [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+      values: [235,294,332,354,364,404,422,423,436,426,431,448,459,462,464,461,458,462,469,469,466],
+      color: "#D66001"
+    },
+    heatmap: {
+      factors: ["Value","Quality","Growth","Momentum","Low volatility"],
+      years: ["31-12-2015","31-12-2016","31-12-2017","31-12-2018","31-12-2019","31-12-2020","31-12-2021","31-12-2022","31-12-2023","31-12-2024","31-8-2025"],
+      rows: [
+        [-16.27,  9.07, 11.40, 17.92, 18.16],
+        [ 23.68,  7.31,  4.00,  6.05,  4.53],
+        [ 45.79, 36.32, 42.33, 73.76, 28.56],
+        [-16.60,  2.10,-13.61, -7.68,  3.33],
+        [ -7.71,  8.26, 13.85, 14.00, 10.95],
+        [  7.39, 26.18, 28.89, 19.55, 21.63],
+        [ 50.45, 31.38, 51.19, 60.89, 20.27],
+        [ 30.90,  7.66, -7.66,  7.75,  2.03],
+        [ 56.30, 37.34, 37.13, 45.72, 34.99],
+        [ 21.05, 25.34, 31.22, 32.41, 14.15],
+        [  5.80,  4.37,  1.30, -4.83, 10.29]
+      ],
+      note: "Source: Bloomberg FTW Long-Only Factor Portfolios. Calendar year performance on absolute basis. Past performance may or may not be sustained in future and is not a guarantee of any future returns. The above table is for understanding and illustrative purposes only."
+    }
+  },
+  whyCards: [
+    { icon:"signal", h:"Investment expertise, <em>enhanced by technology</em>", items:[
+      "Combines human insight and the power of technologies like <b>AI, and machine learning</b>.",
+      "Ability to access over <b>1,000 Indian stocks</b> across all market capitalizations.",
+      "Employs <b>400+ India specific signals</b>.",
+      "Focused on <b>stock-specific risk</b>."
+    ]},
+    { icon:"filter", h:"Why Flexi Cap <em>now?</em>", items:[
+      "Increased <b>variability in returns</b> observed across large-cap, mid-cap, and small-cap segments within Indian equities.",
+      "Increasing breadth across different market cap can provide <b>diversification</b> with a broad range across sectors.",
+      "The growth of the Indian equities market, increasing trading volume and liquidity can make Flexi Cap funds an <b>ideal choice right now</b>."
+    ]},
+    { icon:"block", h:"Delivered at a relatively <em>low price</em>", items:[
+      "Our endeavor is to leverage our technology and expertise to deliver the <b>differentiated alpha</b> at a relatively low price point.",
+      "<b>No exit load.</b>"
+    ]}
+  ],
+  aladdin: {
+    why: ["<b>Understand &amp; manage risk</b>","<b>Operate more efficiently</b>","<b>Uncover more opportunities</b> for scalable growth"],
+    segments: ["Portfolio Risk & Analytics","Portfolio Management","Trade Execution","Investment Operations","Client Reporting"],
+    innerRing: "Compliance & Oversight",
+    center: "Centralised Source of Data",
+    stats: [
+      { value:1100, prefix:"~", suffix:"", label:"Clients using Aladdin&reg; &amp; eFront&reg; technology<sup>1</sup>" },
+      { value:4500, prefix:"", suffix:"+", label:"Skilled engineers, financial modelers &amp; data experts supporting Aladdin<sup>2</sup>" },
+      { value:5000, prefix:"", suffix:"+", label:"Risk factors produced &amp; monitored by Aladdin<sup>3</sup>" }
+    ],
+    src: "Source: BlackRock; blackrock.com/aladdin/products/aladdin-risk; <sup>1</sup> Data as of 6/30/24, <sup>2</sup> Data as of 2/1/24, <sup>3</sup> Data as of 11/15/23. <sup>4</sup> Aladdin is BlackRock's proprietary platform which is licensed to the JioBlackRock AMC. eFront, part of BlackRock, integrates with Aladdin&reg; to offer a unified multi-asset investment technology solution for alternative and public asset management. Note: While proprietary technology platforms may help manage risk, risk cannot be eliminated."
+  },
+  funnel: [
+    { n:"i",   h:"Universe definition", p:"~1,000 stocks with standardized data inputs.", dots:"pool", cls:"" },
+    { n:"ii",  h:"Liquidity reduction", p:"Reduced to ~750 stocks based on liquidity, turnover, and execution feasibility.", dots:"filter", cls:"" },
+    { n:"iii", h:"Nifty 500 TRI lens", p:"For sector / market-cap representation and active risk framing.", dots:"lens", cls:"" },
+    { n:"iv",  h:"SAE Signal", p:"Systematic, rules-based scoring allocated to each stock.", dots:"signal", cls:"scored" },
+    { n:"v",   h:"Corporate governance filter", p:"Screens the scored universe before construction.", dots:"gov", cls:"" }
+  ],
+  fInputs: [
+    { h:"Risk model", p:"Provides security-level risk modelling for each constituent in the investable universe." },
+    { h:"Transaction costs", p:"Estimates fixed and market impact costs for each security." },
+    { h:"Fund manager inputs", p:"Direct judgement applied within the optimization." }
+  ],
+  footer: {
+    sources: "BlackRock Financials &middot; ADV Ratings (31 Mar 2025) &middot; World Bank 2023 &middot; Bloomberg (30 May 2025) &middot; BlackRock Q2 2025 report &middot; Systematic Investing | BlackRock &middot; JioBlackRock Flexi Cap Fund NFO presentation, Sep 2025.",
+    disclosures: "Mutual fund investments are subject to market risks. Read all scheme-related documents carefully. This report is prepared by Xylar for the exclusive, private use of its clients and is not an offer, solicitation or investment advice. The JioBlackRock Flexi Cap Fund is offered by Jio BlackRock Asset Management Private Limited. The systematic approach involves utilizing inputs from the Fund Managers and signal research scores shared by BlackRock Inc., derived using big data and machine learning, a form of artificial intelligence. Signals are selected based on their economic rationale and demonstrated statistical relevance. Past performance may or may not be sustained in future."
+  }
+};
+
+/* ============================================================
+   Layer 3 · Engine
+   ============================================================ */
+const $ = (s,c=document)=>c.querySelector(s);
+const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t)};
+const BEAM=['#D66001','#F1F0A8','#9FFFFB','#4757EA'];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer=matchMedia('(pointer:fine)').matches;
+
+/* ---------- dot icon factory (7×7 particle grid) ---------- */
+function dotIcon(kind, light=false){
+  const N=7,sp=9,r=2.1,o=5,base=light?'5,5,5':'255,255,255';
+  const path=[[0,6],[1,6],[1,5],[2,5],[3,5],[3,4],[3,3],[4,3],[4,2],[5,2],[5,1],[6,1],[6,0]];
+  let dots='';
+  for(let ry=0;ry<N;ry++)for(let cx=0;cx<N;cx++){
+    let fill=`rgba(${base},.13)`,rad=r;
+    if(kind==='pool') fill=`rgba(${base},${(.1+((cx*7+ry*13)%10)/10*.4).toFixed(2)})`;
+    if(kind==='filter'){const keep=((cx+ry*N)%3!==0);fill=keep?`rgba(${base},.55)`:`rgba(${base},.07)`}
+    if(kind==='lens'){const d=Math.hypot(cx-3,ry-3);fill=d<2.6?`rgba(${base},.6)`:`rgba(${base},.09)`}
+    if(kind==='signal'){const on=path.some(p=>p[0]===cx&&p[1]===ry);fill=on?(light?'#050505':'#FFFFFF'):`rgba(${base},.1)`;rad=on?r+.4:r}
+    if(kind==='gov'){const on=ry>=2&&ry<=4;fill=on?`rgba(${base},.5)`:`rgba(${base},.08)`}
+    if(kind==='block'){const on=cx>=2&&cx<=4&&ry>=2&&ry<=4;fill=on?`rgba(${base},.85)`:`rgba(${base},.07)`}
+    if(kind==='doc'){const on=cx>=2&&cx<=4;fill=on?`rgba(${base},.5)`:`rgba(${base},.08)`}
+    if(kind==='news'){const on=ry===1||ry===3||ry===5;fill=on?`rgba(${base},.45)`:`rgba(${base},.08)`}
+    if(kind==='social'){const on=(cx+ry)%2===0;fill=on?`rgba(${base},.4)`:`rgba(${base},.08)`}
+    if(kind==='macro'){const on=ry===6-cx;fill=on?`rgba(${base},.6)`:`rgba(${base},.08)`}
+    dots+=`<circle cx="${o+cx*sp}" cy="${o+ry*sp}" r="${rad}" fill="${fill}"/>`;
+  }
+  const S=o*2+(N-1)*sp;
+  return `<svg viewBox="0 0 ${S} ${S}">${dots}</svg>`;
+}
+
+/* ---------- content render ---------- */
+(function render(){
+  $('#coverSub').innerHTML=DATA.cover.sub;
+  $('#coverMeta').innerHTML=DATA.cover.meta.map(m=>`<span class="chip">${m.k} &nbsp;<b>${m.v}</b></span>`).join('');
+  $('#tocList').innerHTML=DATA.toc.map((t,i)=>`<li><a href="#${t[0]}"><span class="n">${String(i+1).padStart(2,'0')}</span>${t[1]}</a></li>`).join('');
+  $('#jioList').innerHTML=DATA.managers.jio.map(x=>`<li>${x}</li>`).join('');
+  $('#brList').innerHTML=DATA.managers.blackrock.map(x=>`<li>${x}</li>`).join('');
+  $('#mgrSrc').innerHTML=DATA.managers.src;
+  $('#whyList').innerHTML=DATA.venn.why.map(x=>`<li><span>${x}</span></li>`).join('');
+  $('#saeCaptions').innerHTML=DATA.sae.captions.map((c,i)=>`
+    <div class="sae-cap glass" data-i="${i}"><span class="n">${c.n}</span><h3>${c.h}</h3><p>${c.p}</p></div>`).join('');
+  $('#saeChip').innerHTML=`<i></i>${DATA.sae.chip}`;
+  /* equation */
+  const icons=['doc','news','social','macro'];
+  $('#eqStack').innerHTML=DATA.ch5.sources.map((s,i)=>`
+    ${i>0?'<div class="eq-op">+</div>':''}
+    <div class="eq-item glass"><div class="doticon">${dotIcon(icons[i])}</div><span>${s}</span></div>`).join('')
+    +`<div class="eq-op">=</div>
+    <div class="eq-result glass"><div class="doticon">${dotIcon('signal')}</div><span>${DATA.ch5.result}</span></div>`;
+  $('#gapsP5').innerHTML=DATA.ch5.gaps; $('#edgeP5').innerHTML=DATA.ch5.edge;
+  $('#gapsP6').innerHTML=DATA.ch6.gaps; $('#edgeP6').innerHTML=DATA.ch6.edge;
+  $('#whyCards').innerHTML=DATA.whyCards.map((c,i)=>`
+    <div class="wc glass tilt rv" style="--d:${i*.08}s"><div class="sheen"></div>
+      <div class="doticon">${dotIcon(c.icon)}</div><h3>${c.h}</h3>
+      <ul>${c.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+    </div>`).join('');
+  $('#aladWhy').innerHTML=DATA.aladdin.why.map(x=>`<li><span>${x}</span></li>`).join('');
+  $('#aladStats').innerHTML=DATA.aladdin.stats.map(s=>`
+    <div class="astat"><div class="k"><span class="count" data-v="${s.value}" data-p="${s.prefix}" data-s="${s.suffix}">${s.prefix}0${s.suffix}</span></div><div class="l">${s.label}</div></div>`).join('');
+  $('#aladSrc').innerHTML=DATA.aladdin.src;
+  $('#funnelStages').innerHTML=DATA.funnel.map((f,i)=>`
+    <div class="fstage glass tilt rv ${f.cls}" style="--d:${i*.06}s"><div class="sheen"></div>
+      <span class="fn">${f.n}</span><h4>${f.h}</h4><p>${f.p}</p>
+      <div class="fdots">${dotIcon(f.dots)}</div>
+    </div>`).join('');
+  $('#fInputs').innerHTML=DATA.fInputs.map(f=>`<div class="f-in"><h5>${f.h}</h5><p>${f.p}</p></div>`).join('');
+  $('#footSources').innerHTML=DATA.footer.sources;
+  $('#footDisclosures').innerHTML=DATA.footer.disclosures;
+  $('#hmNote').innerHTML=DATA.exhibits.heatmap.note;
+})();
+
+/* ---------- custom cursor ---------- */
+(function cursor(){
+  if(!finePointer||reduced) return;
+  const c=$('#cursor');
+  let x=innerWidth/2,y=innerHeight/2,tx=x,ty=y,scale=1,tScale=1,shown=false;
+  addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;if(!shown){c.style.opacity=1;shown=true}});
+  addEventListener('mouseleave',()=>{c.style.opacity=0;shown=false});
+  document.addEventListener('mouseover',e=>{
+    tScale=e.target.closest('a,button,.tilt,.toc-list a')?1.7:1;
+  });
+  (function loop(){
+    x=lerp(x,tx,.18);y=lerp(y,ty,.18);scale=lerp(scale,tScale,.14);
+    c.style.transform=`translate(${x-16}px,${y-16}px) scale(${scale})`;
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ---------- card tilt ---------- */
+(function tilt(){
+  if(!finePointer||reduced) return;
+  $$('.tilt').forEach(el=>{
+    let raf=null,rx=0,ry=0,trx=0,try_=0;
+    function apply(){rx=lerp(rx,trx,.12);ry=lerp(ry,try_,.12);
+      el.style.transform=`perspective(900px) rotateX(${rx.toFixed(3)}deg) rotateY(${ry.toFixed(3)}deg)`;
+      if(Math.abs(rx-trx)>.01||Math.abs(ry-try_)>.01) raf=requestAnimationFrame(apply); else raf=null;}
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      trx=(py-.5)*-4.5; try_=(px-.5)*4.5;
+      el.style.setProperty('--mx',(px*100)+'%'); el.style.setProperty('--my',(py*100)+'%');
+      if(!raf) raf=requestAnimationFrame(apply);
+    });
+    el.addEventListener('mouseleave',()=>{trx=0;try_=0;if(!raf)raf=requestAnimationFrame(apply)});
+  });
+})();
+
+/* ---------- reveals ---------- */
+(function reveals(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  }),{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  $$('.rv, .mask, .hm').forEach(el=>io.observe(el));
+})();
+
+/* ---------- counters ---------- */
+(function counters(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;io.unobserve(el);
+    const v=+el.dataset.v,p=el.dataset.p,s=el.dataset.s;
+    const fmt=n=>Math.round(n).toLocaleString('en-US');
+    if(reduced){el.textContent=p+fmt(v)+s;return}
+    const t0=performance.now(),dur=1400;
+    (function tick(t){const k=clamp((t-t0)/dur,0,1),e2=1-Math.pow(1-k,4);
+      el.textContent=p+fmt(v*e2)+s;
+      if(k<1)requestAnimationFrame(tick)})(t0);
+  }),{threshold:.5});
+  $$('.count').forEach(el=>io.observe(el));
+})();
+
+/* ---------- rings (dotted particle rings) ---------- */
+$$('[data-ring]').forEach(el=>{
+  let dots='';
+  const n=26,R=36,C=38;
+  for(let i=0;i<n;i++){const a=i/n*6.2832;
+    dots+=`<circle cx="${C+R*Math.cos(a)}" cy="${C+R*Math.sin(a)}" r="1.4" fill="rgba(255,255,255,${.25+.35*((i*7)%5)/5})"/>`}
+  el.insertAdjacentHTML('afterbegin',`<svg viewBox="0 0 76 76">${dots}</svg>`);
+});
+
+/* ---------- Venn (03) ---------- */
+(function venn(){
+  const W=640,H=430,r=158;
+  const c1={x:230,y:200},c2={x:410,y:200};
+  const ringDots=(c,tone)=>{let s='';const n=64;
+    for(let i=0;i<n;i++){const a=i/n*6.2832;
+      s+=`<circle cx="${c.x+r*Math.cos(a)}" cy="${c.y+r*Math.sin(a)}" r="1.5" fill="rgba(255,255,255,${tone})"/>`}
+    return s};
+  const listSVG=(items,x,anchor)=>items.map((t,i)=>
+    `<text x="${x}" y="${216 + i*24 - (items.length-1)*12}" text-anchor="${anchor}" font-size="12.5" fill="#B4B2B1" font-family="Geist,sans-serif">${t}</text>`).join('');
+  $('#venn').innerHTML=`
+  <svg viewBox="0 0 ${W} ${H}">
+    <defs>
+      <clipPath id="vclip"><circle cx="${c1.x}" cy="${c1.y}" r="${r}"/></clipPath>
+      <linearGradient id="vbeam" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#D66001"/><stop offset=".34" stop-color="#F1F0A8"/>
+        <stop offset=".66" stop-color="#9FFFFB"/><stop offset="1" stop-color="#4757EA"/>
+      </linearGradient>
+      <radialGradient id="vglow" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="rgba(255,255,255,.28)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+    </defs>
+    ${ringDots(c1,'.35')}
+    ${ringDots(c2,'.35')}
+    <g clip-path="url(#vclip)">
+      <circle cx="${c2.x}" cy="${c2.y}" r="${r}" fill="url(#vbeam)" opacity=".07"/>
+      <circle cx="${c2.x}" cy="${c2.y}" r="${r}" fill="url(#vglow)" opacity=".65"/>
+    </g>
+    <text x="${c1.x-96}" y="96" text-anchor="middle" font-size="19" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">Human</text>
+    <text x="${c2.x+96}" y="96" text-anchor="middle" font-size="19" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">Machine</text>
+    ${listSVG(['Fundamental research','Theme definition','Fund manager views','Risk management','Governance insights'], c1.x-96, 'middle')}
+    ${listSVG(['AI and machine learning','Alternative data','Geolocations','Online search activity','Macro trends','Broker reports','Consumer transactions'], c2.x+96, 'middle')}
+    <circle cx="320" cy="200" r="3" fill="#FFFFFF"/>
+    <line x1="320" y1="203" x2="320" y2="382" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+    <circle cx="320" cy="388" r="4" fill="url(#vbeam)"/>
+  </svg>`;
+})();
+
+/* ---------- hub-and-spoke (06) ---------- */
+function hub(el, items, beam){
+  const W=440,H=340,cy=H/2,R=50,BW=136,BH=32;
+  const few=items.length<=3;
+  const cx=few?120:W/2;
+  let s='';
+  /* hub dotted ring — beam-tinted for the modern approach */
+  const n=44;
+  for(let i=0;i<n;i++){
+    const a=i/n*6.2832;
+    const fill=beam?BEAM[Math.floor(i/n*3.999)]:'rgba(255,255,255,.4)';
+    s+=`<circle cx="${(cx+R*Math.cos(a)).toFixed(1)}" cy="${(cy+R*Math.sin(a)).toFixed(1)}" r="1.6" fill="${fill}"${beam?' opacity=".85"':''}/>`;
+  }
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R-13}" fill="rgba(255,255,255,.03)"/>`;
+  const label=beam?['Alternative','data']:['Traditional','data'];
+  s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="13.5" fill="#FFFFFF" font-family="Denton,Georgia,serif">
+      <tspan x="${cx}" dy="0">${label[0]}</tspan><tspan x="${cx}" dy="16">${label[1]}</tspan></text>`;
+  /* spokes + tags */
+  items.forEach((t,i)=>{
+    let bx,by,sx,sy,ex,ey;
+    if(few){
+      by=cy-((items.length-1)*56)/2+i*56;
+      bx=W-BW-24;
+      sx=cx+R*Math.cos((by-cy)/140); sy=cy+(by-cy)*.35;
+      ex=bx; ey=by;
+    } else {
+      const side=i<items.length/2?-1:1;
+      const row=i%(items.length/2);
+      by=cy-56+row*56;
+      bx=side<0?18:W-BW-18;
+      sx=cx+side*R; sy=cy+(by-cy)*.35;
+      ex=side<0?bx+BW:bx; ey=by;
+    }
+    s+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex}" y2="${ey}" stroke="rgba(255,255,255,.13)" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round"/>`;
+    s+=`<rect x="${bx}" y="${by-BH/2}" rx="9" width="${BW}" height="${BH}" fill="rgba(255,255,255,.028)" stroke="rgba(255,255,255,.09)"/>
+        <text x="${bx+BW/2}" y="${by+3.5}" text-anchor="middle" font-size="10.5" fill="#B4B2B1" font-family="Geist,sans-serif">${t}</text>`;
+  });
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+}
+hub($('#hubTrad'), DATA.ch6.trad, false);
+hub($('#hubAlt'), DATA.ch6.alt, true);
+
+/* ---------- Exhibit A · 3-series line chart ---------- */
+(function lineChart(){
+  const T=DATA.exhibits.turnover;
+  const W=560,H=330,PL=42,PR=16,PT=14,PB=36;
+  const months=[]; for(let y=T.xStart;y<=T.xEnd;y+=1/12) months.push(y);
+  const x=v=>PL+(W-PL-PR)*(v-T.xStart)/(T.xEnd-T.xStart);
+  const y=v=>PT+(H-PT-PB)*(1-v/T.yMax);
+  const interp=(anchors,t)=>{
+    if(t<=anchors[0][0])return anchors[0][1];
+    for(let i=1;i<anchors.length;i++){
+      if(t<=anchors[i][0]){const [x0,v0]=anchors[i-1],[x1,v1]=anchors[i];
+        const k=(t-x0)/(x1-x0);return v0+(v1-v0)*(k*k*(3-2*k))}}
+    return anchors[anchors.length-1][1]};
+  let grid='';
+  for(let g=0;g<=1200;g+=200){
+    grid+=`<line x1="${PL}" y1="${y(g)}" x2="${W-PR}" y2="${y(g)}" stroke="rgba(5,5,5,.07)" stroke-dasharray="1 5"/>
+    <text x="${PL-8}" y="${y(g)+3.5}" text-anchor="end" font-size="9.5" fill="#9a9a9a" font-family="Geist,sans-serif">${g}</text>`}
+  for(let yr=2014;yr<=2025;yr+=2){
+    grid+=`<text x="${x(yr)}" y="${H-12}" text-anchor="middle" font-size="9.5" fill="#9a9a9a" font-family="Geist,sans-serif">Jan-${String(yr).slice(2)}</text>`}
+  let lines='';
+  T.series.forEach((s,si)=>{
+    const pts=months.map((m,i)=>{
+      const noise=Math.sin(i*.71+si*2.3)*16+Math.sin(i*.23+si)*11+Math.sin(i*1.7+si*4)*7;
+      return `${x(m).toFixed(1)},${y(clamp(interp(s.anchors,m)+noise,0,T.yMax)).toFixed(1)}`}).join(' ');
+    lines+=`<polyline class="lcl" points="${pts}" fill="none" stroke="${s.color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+  $('#lineChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${grid}${lines}</svg>`;
+  $('#lcLegend').innerHTML=T.series.map(s=>`<span><i style="background:${s.color}"></i>${s.label}</span>`).join('');
+  if(!reduced){
+    $$('.lcl').forEach((l,i)=>{const len=l.getTotalLength();
+      l.style.strokeDasharray=len;l.style.strokeDashoffset=len;
+      new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){
+        l.style.transition=`stroke-dashoffset 2s cubic-bezier(.22,1,.36,1) ${.25+i*.2}s`;
+        l.style.strokeDashoffset=0;o.disconnect()}},{threshold:.3}).observe(l)});
+  }
+})();
+
+/* ---------- Exhibit B · coverage bars ---------- */
+(function barChart(){
+  const C=DATA.exhibits.coverage;
+  const W=560,H=330,PL=36,PR=10,PT=26,PB=42;
+  const n=C.values.length;
+  const bw=(W-PL-PR)/n*.62;
+  const x=i=>PL+(W-PL-PR)*(i+.5)/n;
+  const yMin=200,yMax=500;
+  const y=v=>PT+(H-PT-PB)*(1-(v-yMin)/(yMax-yMin));
+  let grid='';
+  for(let g=200;g<=500;g+=100){
+    grid+=`<line x1="${PL}" y1="${y(g)}" x2="${W-PR}" y2="${y(g)}" stroke="rgba(5,5,5,.07)" stroke-dasharray="1 5"/>
+    <text x="${PL-7}" y="${y(g)+3.5}" text-anchor="end" font-size="9.5" fill="#9a9a9a" font-family="Geist,sans-serif">${g}</text>`}
+  let bars='';
+  C.values.forEach((v,i)=>{
+    const bx=x(i)-bw/2, by=y(v), bh=H-PB-by;
+    bars+=`<rect class="bcr" x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="${C.color}" opacity=".92" style="transform-origin:${x(i)}px ${H-PB}px"/>`;
+    if(i%2===0) bars+=`<text x="${x(i)}" y="${by-6}" text-anchor="middle" font-size="8.5" fill="#7a7a7a" font-family="Geist,sans-serif">${v}</text>`;
+    if(i%4===0||i===n-1) bars+=`<text x="${x(i)}" y="${H-14}" text-anchor="middle" font-size="9.5" fill="#9a9a9a" font-family="Geist,sans-serif">${C.years[i]}</text>`;
+  });
+  $('#barChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${grid}${bars}</svg>`;
+  if(!reduced){
+    const rects=$$('.bcr');
+    rects.forEach(r=>{r.style.transform='scaleY(0)'});
+    new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){
+      rects.forEach((r,i)=>{r.style.transition=`transform .9s cubic-bezier(.22,1,.36,1) ${i*.03}s`;r.style.transform='scaleY(1)'});
+      o.disconnect()}},{threshold:.3}).observe($('#barChart'));
+  }
+})();
+
+/* ---------- Exhibit C · heatmap (semantic red/green, muted) ---------- */
+(function heatmap(){
+  const hm=DATA.exhibits.heatmap,g=$('#heatmap');
+  const all=hm.rows.flat(),min=Math.min(...all),max=Math.max(...all);
+  const color=v=>{
+    const t=clamp((v-min)/(max-min),0,1);
+    const hue=lerp(6,138,Math.pow(t,.9));
+    const sat=46, li=88-Math.pow(t,.9)*30 - (v<0? (Math.abs(v)/17)*10 : 0);
+    return {bg:`hsl(${hue.toFixed(0)},${sat}%,${clamp(li,42,90).toFixed(0)}%)`, dark: li<58};
+  };
+  let html=`<div></div>`+hm.factors.map(f=>`<div class="hm-h">${f}</div>`).join('');
+  hm.rows.forEach((row,ri)=>{
+    html+=`<div class="hm-y">${hm.years[ri].slice(-4)==='2025'&&hm.years[ri].startsWith('31-8')?'2025*':hm.years[ri].slice(-4)}</div>`;
+    row.forEach((v,ci)=>{
+      const c=color(v);
+      html+=`<div class="hm-c" style="--hd:${(ri*5+ci)*.012}s;background:${c.bg};color:${c.dark?'#FFFFFF':'#1c1c1c'}">${v.toFixed(2)}%</div>`;
+    });
+  });
+  g.innerHTML=html;
+  $('#hmMin').textContent=min.toFixed(1)+'%';
+  $('#hmMax').textContent='+'+max.toFixed(1)+'%';
+  $('#hmScaleBar').style.background=`linear-gradient(90deg,${color(min).bg},${color(min*0.2).bg},${color(12).bg},${color(max*.6).bg},${color(max).bg})`;
+})();
+
+/* ---------- Aladdin radial (10) ---------- */
+(function aladdin(){
+  const A=DATA.aladdin;
+  const W=520,H=520,cx=W/2,cy=H/2;
+  const R1=150,R2=204;  /* segment band */
+  const segN=A.segments.length,gap=.075;
+  const arc=(r,a0,a1)=>{
+    const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    const large=(a1-a0)>Math.PI?1:0;
+    return {x0,y0,x1,y1,large}};
+  let s='';
+  /* dotted outer particle ring */
+  for(let i=0;i<80;i++){const a=i/80*6.2832;
+    s+=`<circle cx="${cx+238*Math.cos(a)}" cy="${cy+238*Math.sin(a)}" r="1.3" fill="rgba(255,255,255,${.12+.2*((i*7)%5)/5})"/>`}
+  /* segments */
+  A.segments.forEach((label,i)=>{
+    const a0=-Math.PI/2 + i*(6.2832/segN)+gap/2;
+    const a1=-Math.PI/2 + (i+1)*(6.2832/segN)-gap/2;
+    const o=arc(R2,a0,a1),inn=arc(R1,a1,a0);
+    s+=`<path d="M ${o.x0} ${o.y0} A ${R2} ${R2} 0 ${o.large} 1 ${o.x1} ${o.y1} L ${inn.x0} ${inn.y0} A ${R1} ${R1} 0 ${o.large} 0 ${inn.x1} ${inn.y1} Z"
+        fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.09)" stroke-width="1"/>`;
+    const mid=(a0+a1)/2,tr=(R1+R2)/2;
+    const words=label.split(' ');
+    const tx=cx+tr*Math.cos(mid),ty=cy+tr*Math.sin(mid);
+    const lh=13;
+    s+=`<text x="${tx}" y="${ty-(words.length-1)*lh/2+4}" text-anchor="middle" font-size="11" fill="#B4B2B1" font-family="Geist,sans-serif" font-weight="500">`
+      +words.map((w,wi)=>`<tspan x="${tx}" dy="${wi===0?0:lh}">${w}</tspan>`).join('')+`</text>`;
+  });
+  /* inner dashed ring — compliance */
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R1-22}" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="2 7" stroke-linecap="round"/>`;
+  s+=`<text x="${cx}" y="${cy-R1+40}" text-anchor="middle" font-size="10" letter-spacing="2.4" fill="#B4B2B1" font-family="Geist,sans-serif" font-weight="500">${A.innerRing.toUpperCase()}</text>`;
+  /* beam-ringed centre */
+  s+=`<defs><linearGradient id="abeam" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#D66001"/><stop offset=".34" stop-color="#F1F0A8"/>
+    <stop offset=".66" stop-color="#9FFFFB"/><stop offset="1" stop-color="#4757EA"/></linearGradient></defs>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="84" fill="none" stroke="url(#abeam)" stroke-width="1.4" opacity=".85"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="80" fill="#0A0A0A" stroke="rgba(255,255,255,.08)"/>`;
+  const cw=A.center.split(' ');
+  s+=`<text x="${cx}" y="${cy-10}" text-anchor="middle" font-size="15" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">`
+    +`<tspan x="${cx}" dy="0">${cw.slice(0,2).join(' ')}</tspan><tspan x="${cx}" dy="19">${cw.slice(2).join(' ')}</tspan></text>`;
+  $('#aladRadial').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+})();
+
+/* ============================================================
+   Canvases
+   ============================================================ */
+/* cover — "the intelligence horizon" (halftone dot screen, Three.js shader).
+   A rim-lit ring rising from below the fold: two concentric circle strokes
+   with a beam-gradient glow in the gap, rendered as a halftone dot screen
+   (dot size tracks scene brightness) with a cursor magnifier + idle pulse. */
+(function cover(){
+  const cv=$('#coverCanvas'),host=$('.cover');
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+  renderer.setClearColor(0x050505,1);
+  const scene=new THREE.Scene();
+  const camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+  const uniforms={
+    uRes:{value:new THREE.Vector2(1,1)},
+    uMouse:{value:new THREE.Vector2(.5,.5)},
+    uPulse:{value:1},
+    uIntro:{value:0}
+  };
+  const frag=`
+precision highp float;
+uniform vec2 uRes; uniform vec2 uMouse;
+uniform float uPulse; uniform float uIntro;
+
+vec3 ORANGE = vec3(0.839,0.376,0.004);
+vec3 CREAM  = vec3(0.945,0.941,0.659);
+vec3 CYAN   = vec3(0.624,1.000,0.984);
+vec3 BLUE   = vec3(0.278,0.341,0.918);
+vec3 WHITE  = vec3(1.0);
+
+/* intensity -> color: black -> blue -> cyan -> cream -> orange -> white */
+vec3 ramp(float I){
+  vec3 c = vec3(0.0);
+  c = mix(c, BLUE,   smoothstep(0.00, 0.16, I));
+  c = mix(c, CYAN,   smoothstep(0.16, 0.34, I));
+  c = mix(c, CREAM,  smoothstep(0.34, 0.54, I));
+  c = mix(c, ORANGE, smoothstep(0.52, 0.74, I));
+  c = mix(c, WHITE,  smoothstep(0.84, 1.00, I));
+  return c;
+}
+
+/* the underlying scene: two concentric circles + gradient glow + blue halo */
+vec3 sceneColor(vec2 uv){
+  float asp = uRes.x / uRes.y;
+  vec2 p = vec2((uv.x - 0.5) * asp, uv.y);        // x in height-units, centred (keeps the circle round)
+
+  vec2  c      = vec2(0.0, mix(-1.62, -1.50, uIntro)); /* crest tops out ~16% up the viewport, clear of the cover content */
+  float R      = 1.66;                            // outer ring radius
+  float ringW  = 0.13;                            // gap between the two concentric circles
+  float innerR = R - ringW;
+  float midR   = R - ringW * 0.5;
+  float sw     = 0.0035;                          // circle stroke thickness
+
+  float d   = length(p - c);
+  vec2  nrm = (p - c) / max(d, 1e-4);
+  float top = pow(clamp(nrm.y, 0.0, 1.0), 1.25);
+  float shim = exp(-pow((uv.x - uMouse.x) / 0.18, 2.0));
+
+  float band = exp(-pow((d - midR) / (0.30 * ringW), 2.0)); // gradient glow centred in the gap
+  float so   = exp(-pow((d - R)      / sw, 2.0));            // outer circle stroke
+  float si   = exp(-pow((d - innerR) / sw, 2.0));            // inner circle stroke
+
+  float I = (band * 0.60 + so * 1.05 + si * 0.80) * top * (0.82 + 0.45 * shim);
+  I *= uPulse * uIntro;
+
+  vec3 col = ramp(clamp(I, 0.0, 1.0));
+
+  /* outer blue ambient glow above the ring — contained, reacts to cursor */
+  float bloom = exp(-max(d - R, 0.0) / 0.195) * step(R, d) * top * (0.7 + 0.6 * shim) * uPulse * uIntro;
+  col += BLUE * bloom * 0.5;
+  return col;
+}
+
+void main(){
+  /* halftone dot screen: each cell's dot radius tracks the scene brightness */
+  float cell = uRes.y / 95.0;                       // dot pitch (device px)
+  vec2  fc   = gl_FragCoord.xy;
+  vec2  cc   = (floor(fc / cell) + 0.5) * cell;      // cell centre
+  vec3  col  = sceneColor(cc / uRes);
+  float lum  = dot(col, vec3(0.299, 0.587, 0.114));
+  float r    = sqrt(clamp(lum, 0.0, 1.0)) * (cell * 0.5);
+
+  /* cursor magnifier: dots grow inside a soft radius around the pointer */
+  float md   = distance(cc, uMouse * uRes);
+  r *= 1.0 + 0.95 * exp(-pow(md / (uRes.y * 0.18), 2.0));
+  r  = min(r, cell * 0.62);
+
+  float dd  = distance(fc, cc);
+  float dt  = 1.0 - smoothstep(r - 1.5, r + 1.5, dd);
+  gl_FragColor = vec4(col * dt, 1.0);
+}`;
+  const mat=new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader:'void main(){ gl_Position = vec4(position, 1.0); }',
+    fragmentShader:frag
+  });
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat));
+  function resize(){
+    const w=host.clientWidth,h=host.clientHeight;
+    const dpr=Math.min(devicePixelRatio||1,2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(w,h,false);           /* CSS sizes the canvas (gotcha #1) */
+    uniforms.uRes.value.set(w*dpr,h*dpr);
+  }
+  addEventListener('resize',()=>{clearTimeout(resize.__t);resize.__t=setTimeout(resize,120)});
+  resize();
+  /* pointer (smoothed shimmer + magnifier) */
+  const target={x:.5,y:.5};
+  host.addEventListener('pointermove',e=>{
+    const r=host.getBoundingClientRect();
+    target.x=(e.clientX-r.left)/r.width;
+    target.y=1-(e.clientY-r.top)/r.height;   /* y up, matches gl_FragCoord */
+  });
+  function render(){
+    uniforms.uMouse.value.x+=(target.x-uniforms.uMouse.value.x)*.06;
+    uniforms.uMouse.value.y+=(target.y-uniforms.uMouse.value.y)*.06;
+    renderer.render(scene,camera);
+  }
+  if(reduced){uniforms.uIntro.value=1;render();return}
+  gsap.to(uniforms.uIntro,{value:1,duration:1.8,ease:'power2.out',delay:.15});
+  gsap.to(uniforms.uPulse,{value:1.10,duration:3.6,ease:'sine.inOut',yoyo:true,repeat:-1});
+  new IntersectionObserver(es=>{
+    renderer.setAnimationLoop(es[0].isIntersecting?render:null);
+  }).observe(cv);
+})();
+
+/* static dot pools for dividers */
+$$('[data-dots]').forEach(cv=>{
+  const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    const W=cv.clientWidth,H=cv.clientHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    const n=Math.floor(W*H/16000);
+    let seed=7;
+    const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+    for(let i=0;i<n;i++){
+      ctx.fillStyle=`rgba(255,255,255,${(.03+rnd()*.1).toFixed(3)})`;
+      ctx.beginPath();ctx.arc(rnd()*W,rnd()*H,1.2,0,6.2832);ctx.fill();
+    }
+  }
+  draw();addEventListener('resize',draw);
+});
+
+/* light-section ink dot pool */
+(function exDots(){
+  const cv=$('#exDots');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  function draw(){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    const W=cv.clientWidth,H=cv.clientHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+    let seed=11;
+    const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+    const n=Math.floor(W*H/26000);
+    for(let i=0;i<n;i++){
+      ctx.fillStyle=`rgba(5,5,5,${(.02+rnd()*.05).toFixed(3)})`;
+      ctx.beginPath();ctx.arc(rnd()*W,rnd()*H,1.2,0,6.2832);ctx.fill();
+    }
+  }
+  draw();addEventListener('resize',draw);
+})();
+
+/* SAE scroll stage (v1 engine) */
+(function sae(){
+  const sec=$('#saefig'),stage=$('.sae-stage'),cv=$('#saeCanvas'),ctx=cv.getContext('2d');
+  const caps=$$('.sae-cap'),prog=$$('.sae-progress span'),chip=$('#saeChip');
+  let W,H,dpr,parts=[],pathCells=[],gridMap=new Map(),raf=null,p=0,t0=performance.now();
+  const PATH_STEPS=[[0,0],[1,0],[1,-1],[2,-1],[2,-2],[3,-2],[4,-2],[4,-3],[5,-3],[5,-4],[6,-4],[6,-5],[7,-5]];
+  function build(){
+    dpr=Math.min(devicePixelRatio||1,2);
+    W=cv.clientWidth;H=cv.clientHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const sp=Math.max(34,Math.min(52,W/28));
+    const cols=Math.floor((W*.86)/sp),rows=Math.floor((H*.56)/sp);
+    const ox=(W-(cols-1)*sp)/2,oy=H*.24;
+    parts=[];gridMap.clear();
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      const gx=ox+c*sp,gy=oy+r*sp;
+      parts.push({cx:Math.random()*W,cy:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,gx,gy,c,r,base:.12+Math.random()*.3,ph:Math.random()*6.283});
+      gridMap.set(c+','+r,parts[parts.length-1]);
+    }
+    const sc=Math.max(1,Math.floor(cols*.28)),sr=Math.min(rows-1,Math.floor(rows*.82));
+    pathCells=PATH_STEPS.map(([dc,dr])=>gridMap.get(clamp(sc+dc,0,cols-1)+','+clamp(sr+dr,0,rows-1)))
+      .filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i);
+    positionChip();
+  }
+  function positionChip(){
+    if(!pathCells.length)return;
+    const end=pathCells[pathCells.length-1];
+    chip.style.left=Math.min(W-190,end.gx+18)+'px';
+    chip.style.top=Math.max(90,end.gy-46)+'px';
+  }
+  function progress(){
+    const r=sec.getBoundingClientRect();
+    return clamp(-r.top/(r.height-innerHeight),0,1);
+  }
+  function frame(t){
+    p=progress();
+    const tt=(t-t0)/1000;
+    const morph=smooth(.22,.52,p),link=smooth(.42,.6,p),draw=smooth(.62,.9,p),focus=smooth(.66,.85,p);
+    ctx.clearRect(0,0,W,H);
+    for(const d of parts){
+      if(morph<1){d.cx+=d.vx;d.cy+=d.vy;
+        if(d.cx<0||d.cx>W)d.vx*=-1;if(d.cy<0||d.cy>H)d.vy*=-1}
+      const x=lerp(d.cx,d.gx,morph),y=lerp(d.cy,d.gy,morph);
+      d._x=x;d._y=y;
+      const tw=Math.sin(tt*.8+d.ph)*.05;
+      let a=(d.base+tw)*lerp(1,.75,focus);
+      ctx.fillStyle=`rgba(255,255,255,${clamp(a,0,1).toFixed(3)})`;
+      ctx.beginPath();ctx.arc(x,y,1.6,0,6.2832);ctx.fill();
+    }
+    if(link>.01){
+      ctx.lineWidth=1;
+      ctx.strokeStyle=`rgba(255,255,255,${(0.05*link*lerp(1,.4,focus)).toFixed(3)})`;
+      ctx.beginPath();
+      for(const d of parts){
+        if((d.c+d.r)%2)continue;
+        const rn=gridMap.get((d.c+1)+','+d.r),dn=gridMap.get(d.c+','+(d.r+1));
+        if(rn){ctx.moveTo(d._x,d._y);ctx.lineTo(rn._x,rn._y)}
+        if(dn){ctx.moveTo(d._x,d._y);ctx.lineTo(dn._x,dn._y)}
+      }
+      ctx.stroke();
+    }
+    if(draw>.005&&pathCells.length>1){
+      const n=pathCells.length,seg=draw*(n-1);
+      const g=ctx.createLinearGradient(pathCells[0]._x,pathCells[0]._y,pathCells[n-1]._x,pathCells[n-1]._y);
+      BEAM.forEach((c,i)=>g.addColorStop(i/3,c));
+      ctx.strokeStyle=g;ctx.lineWidth=2;ctx.lineJoin=ctx.lineCap='round';
+      ctx.shadowColor='rgba(159,255,251,.35)';ctx.shadowBlur=12*draw;
+      ctx.beginPath();ctx.moveTo(pathCells[0]._x,pathCells[0]._y);
+      for(let i=1;i<n;i++){
+        const k=clamp(seg-(i-1),0,1);if(k<=0)break;
+        const a=pathCells[i-1],b=pathCells[i];
+        ctx.lineTo(lerp(a._x,b._x,k),lerp(a._y,b._y,k));
+      }
+      ctx.stroke();ctx.shadowBlur=0;
+      for(let i=0;i<n;i++){
+        const k=clamp(seg-i+1,0,1);if(k<=0)break;
+        const d=pathCells[i];
+        ctx.fillStyle=`rgba(255,255,255,${(.35+.65*k).toFixed(3)})`;
+        ctx.shadowColor='rgba(255,255,255,.8)';ctx.shadowBlur=10*k;
+        ctx.beginPath();ctx.arc(d._x,d._y,2.6+1.2*k,0,6.2832);ctx.fill();
+        ctx.shadowBlur=0;
+      }
+    }
+    const zone=p<.34?0:p<.62?1:2;
+    caps.forEach((c,i)=>c.classList.toggle('on',i===zone));
+    prog.forEach((s,i)=>s.classList.toggle('on',i===zone));
+    chip.classList.toggle('on',p>.86);
+    raf=requestAnimationFrame(frame);
+  }
+  build();addEventListener('resize',build);
+  if(reduced){p=1;frame(t0);cancelAnimationFrame(raf);caps[2].classList.add('on');return}
+  new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
+    else{cancelAnimationFrame(raf);raf=null}
+  }).observe(stage);
+})();
+</script>
+</body>
+</html>

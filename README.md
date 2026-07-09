@@ -10,10 +10,13 @@ with Claude Code and say: *"Read CLAUDE.md, then build and open the report."*
 XYLAR/
 ├── CLAUDE.md                  ← brand system + editing rules (Claude Code reads this automatically)
 ├── README.md                  ← this file
-├── build.py                   ← python3 build.py → emits the final single-file report
+├── build.py                   ← python3 build.py → emits both single-file reports (v2 + v3)
 ├── brief-template-v2.html     ← THE source. Edit DATA object for new issues.
+├── brief-template-v3.html     ← v3 material study: same content, smoked-glass / machined-metal
+│                                 cards, film grain, rock-photo backdrops in dividers + close
 ├── assets/
 │   ├── xylar-logo.svg         ← Xylar wordmark (white, for dark grounds)
+│   ├── img/rock.webp          ← darkened monochrome rock backdrop (v3 statement moments)
 │   ├── fonts/
 │   │   ├── denton/            ← Denton Test cut: Light, LightItalic, Regular, RegularItalic
 │   │   └── geist/             ← Geist variable font + OFL license

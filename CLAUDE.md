@@ -7,7 +7,13 @@ recurring (weekly/monthly) client-facing asset.
 
 ## How this project works
 
-- `brief-template-v2.html` — the ONLY file you edit. Three layers, top to bottom:
+- Two templates share the same content and engine and differ only in the material layer:
+  `brief-template-v2.html` (original toned-down glass) and `brief-template-v3.html`
+  ("smoked glass & machined metal": graphite card fills, metallic gradient rims with a
+  cursor-tracked specular, page film grain, ink-rimmed paper cards in the light section,
+  and darkened rock-photo backdrops — `assets/img/rock.webp` — in the dividers and close).
+  Content edits (the DATA object) must be applied to both.
+- `brief-template-v2.html` — the reference structure. Three layers, top to bottom:
   1. **CSS design tokens** (`:root`) — brand colors, type, materials. Touch rarely.
   2. **`const DATA = {...}`** at the top of the `<script>` — ALL per-issue content
      (copy, numbers, chart series, footnotes). For a new monthly issue, edit only this.
