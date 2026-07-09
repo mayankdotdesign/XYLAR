@@ -79,6 +79,20 @@ beam-gradient ring is the intelligence layer made literal — it satisfies the b
 - Scroll reveals (`.rv`), masked line reveals on display headlines (`.mask`), animated
   counters, chart draw-ins (lines sweep, bars grow, heatmap cells cascade).
 - SAE scroll-locked canvas stage: chaos → grid+links → beam signal path (380vh section).
+- v3 infographics (each degrades to a static frame under reduced-motion):
+  - SAE lens (03): dotted ring ignites sequentially, vesica blooms (vertical beam:
+    blue crown → orange base), cursor-proximity dot brightening + lens glow; on ≤720px
+    the SVG lists restack as HTML below the diagram for legibility.
+  - Coverage flow (06): source→gauge edges draw in sequence, lit-share ring + count
+    ticks (3/9 vs 9/9); per-row hover hit-rects brighten edge + label.
+  - Aladdin radial (10): chevron segments cascade in, labels on textPath (reversed in
+    the lower half), curved crown text, slow idle dot-ring, hover brightens a segment.
+    The core ring's gradient carries gradientTransform="rotate(90 .5 .5)" to compensate
+    the rotate(-90) draw-in — do not remove one without the other.
+  - Stock-selection pipeline (11): 320vh pinned canvas stage; ~1,000 dots filter
+    through gates (sediment piles at liquidity/governance, Nifty-500 focus/dim split,
+    beam scoring, fund-disc deposit), scroll-scrubbed with per-stage caption card,
+    counter tick-down, progress rail, and the Aladdin engine dock in the finale.
 
 ## Known gotchas (learned the hard way)
 

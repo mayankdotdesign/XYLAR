@@ -81,6 +81,11 @@ h1 em,h2 em{font-style:italic;font-weight:300}
   .rv{opacity:1;transform:none;transition:none}
   .mask>span{transform:none;transition:none}
   html{scroll-behavior:auto}
+  .venn .ring-dot,.venn .lens-shape,.venn .side,.venn .plumb,.venn .plumb-dot,
+  .alad-radial .seg,.alad-radial .dotring,.alad-radial .comp-arc,
+  .alad-radial .core-ring,.alad-radial .core,
+  .flowviz .fnode,.flowviz .fedge,.flowviz .cov-dot,
+  .pipe-cap,.pgate,.pipe-outcome,.pipe-engine{transition:none}
 }
 .rule{height:1px;background:var(--hairline);border:0}
 
@@ -253,6 +258,11 @@ nav .btn{padding:9px 18px;font-size:12px}
   -webkit-mask-image:radial-gradient(115% 95% at 50% 62%,#000 24%,transparent 78%);
   mask-image:radial-gradient(115% 95% at 50% 62%,#000 24%,transparent 78%);
 }
+/* ground-colored fades so the photo dissolves into the page at both edges */
+.photo-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,var(--ground) 0%,transparent 26%,transparent 62%,var(--ground) 96%);
+}
 
 /* ============================================================
    01 — Managers (two circles)
@@ -287,26 +297,52 @@ nav .btn{padding:9px 18px;font-size:12px}
 @media(max-width:1000px){.venn-wrap{grid-template-columns:1fr;gap:40px}}
 .venn{position:relative;width:100%;max-width:640px;margin:0 auto}
 .venn svg{display:block;width:100%;height:auto}
+/* SAE lens draw-in: ring dots ignite sequentially, lens blooms, lists follow */
+.venn .ring-dot{opacity:0;transition:opacity .45s var(--ease);transition-delay:var(--rd,0s)}
+.venn.in .ring-dot{opacity:var(--ro,.5)}
+.venn .lens-shape{
+  opacity:0;transform:scale(.94);transform-box:fill-box;transform-origin:center;
+  transition:opacity 1.2s var(--ease) .55s,transform 1.2s var(--ease) .55s;
+}
+.venn.in .lens-shape{opacity:1;transform:none}
+.venn .side{opacity:0;transform:translateY(12px);transition:opacity .9s var(--ease) var(--sd,.9s),transform .9s var(--ease) var(--sd,.9s)}
+.venn.in .side{opacity:1;transform:none}
+.venn .plumb{stroke-dasharray:240;stroke-dashoffset:240;transition:stroke-dashoffset 1.1s var(--ease) 1.15s}
+.venn.in .plumb{stroke-dashoffset:0}
+.venn .plumb-dot{opacity:0;transition:opacity .5s var(--ease) 1.9s}
+.venn.in .plumb-dot{opacity:1}
+/* ≤720px: SVG type would fall below legibility — lists restack as HTML below the diagram */
+.venn-lists{display:none}
+@media(max-width:720px){
+  .venn .side{display:none}
+  .venn-lists{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
+  .venn-lists h4{font-family:var(--serif);font-weight:300;font-size:18px;margin-bottom:10px}
+  .venn-lists ul{list-style:none}
+  .venn-lists li{font-size:12.5px;color:var(--text-2);line-height:1.5;padding:5px 0;border-bottom:1px solid var(--hairline)}
+  .venn-lists li:last-child{border-bottom:0}
+}
 .venn-tagline{text-align:center;margin-top:26px}
 .venn-tagline .t1{font-family:var(--serif);font-weight:300;font-size:22px}
 .venn-tagline .t2{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:8px}
-.why-list{list-style:none}
-.why-list li{
-  padding:20px 0;border-bottom:1px solid var(--hairline);
-  color:var(--text-2);font-size:14px;line-height:1.7;display:flex;gap:16px;
+/* numbered "why does this matter" card (per the Figma boards) */
+.why-card{padding:36px 38px 28px}
+.why-card .lede{color:var(--text-2);font-size:13.5px;line-height:1.7;margin-bottom:8px}
+.why-num{list-style:none}
+.why-num li{
+  display:flex;gap:24px;padding:20px 0;
+  border-bottom:1px dotted rgba(255,255,255,.17);
+  color:var(--text-2);font-size:14px;line-height:1.7;
 }
-.why-list li:last-child{border-bottom:0}
-.why-list li::before{
-  content:'';width:5px;height:5px;border-radius:50%;background:var(--white);flex:none;margin-top:9px;opacity:.7;
+.why-num li:last-child{border-bottom:0}
+.why-num .n{
+  font-family:var(--serif);font-weight:300;font-size:17px;
+  color:var(--white);min-width:28px;line-height:1.55;flex:none;
 }
-.why-list b{color:var(--white);font-weight:500}
+.why-num b{color:var(--white);font-weight:500}
 .why-head{font-family:var(--serif);font-weight:300;font-size:26px;margin-bottom:18px}
 .why-head em{font-style:italic}
-.powered{
-  margin-top:26px;padding-top:22px;border-top:1px solid var(--hairline);
-  font-size:13px;color:var(--text-2);
-}
-.powered b{color:var(--white);font-weight:500}
+.powered{margin-top:14px;font-size:12.5px;color:var(--muted);text-align:center}
+.powered b{color:var(--text-2);font-weight:500}
 
 /* ============================================================
    SAE particle stage (kept from v1, captions re-sourced)
@@ -381,12 +417,25 @@ nav .btn{padding:9px 18px;font-size:12px}
 /* ============================================================
    06 — Traditional vs alternative hubs
    ============================================================ */
-.hubs{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;align-items:stretch}
+.hubs{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
 @media(max-width:960px){.hubs{grid-template-columns:1fr}}
 .hub-panel{padding:44px 36px;display:flex;flex-direction:column;align-items:center}
 .hub-panel .fig-cap{margin-bottom:34px}
-.hub{position:relative;width:100%;max-width:420px}
+.hub{position:relative;width:100%;max-width:460px}
 .hub svg{display:block;width:100%;height:auto}
+/* coverage flow: edges draw in sequence, ring dots ignite, count ticks */
+.flowviz .fnode{opacity:0;transition:opacity .5s var(--ease) var(--fd,0s)}
+.flowviz.in .fnode{opacity:1}
+.flowviz .fedge{
+  stroke-dasharray:var(--fl,300px);stroke-dashoffset:var(--fl,300px);
+  transition:stroke-dashoffset 1s var(--ease) var(--fd,0s),opacity .35s var(--ease),stroke-width .35s var(--ease);
+}
+.flowviz.in .fedge{stroke-dashoffset:0}
+.flowviz .cov-dot{opacity:.12;transition:opacity .45s var(--ease) var(--fd,0s)}
+.flowviz.in .cov-dot.on{opacity:.95}
+.flowviz .src .flab{transition:fill .35s var(--ease)}
+.flowviz .src:hover .flab{fill:#FFFFFF}
+.flowviz .src:hover .fedge{opacity:1;stroke-width:1.7}
 .hub-tagband{margin-top:30px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--muted)}
 .hub-tagband.comp{color:var(--white)}
 .hub-notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
@@ -470,50 +519,91 @@ nav .btn{padding:9px 18px;font-size:12px}
 /* ============================================================
    10 — Aladdin radial
    ============================================================ */
-.alad{display:grid;grid-template-columns:1fr 1.3fr .8fr;gap:44px;align-items:center}
-@media(max-width:1080px){.alad{grid-template-columns:1fr 1fr}.alad-stats{grid-column:1/-1;flex-direction:row!important;flex-wrap:wrap}}
+.alad{display:grid;grid-template-columns:.72fr 1.55fr 1fr;gap:44px;align-items:center}
+@media(max-width:1080px){.alad{grid-template-columns:1fr 1fr}.alad-stats{grid-column:1/-1;flex-direction:row!important;flex-wrap:wrap;gap:24px}}
 @media(max-width:760px){.alad{grid-template-columns:1fr}}
-.alad-left h3{font-family:var(--serif);font-weight:300;font-size:24px;margin-bottom:18px}
-.alad-left h3 em{font-style:italic}
-.alad-radial{position:relative;max-width:520px;margin:0 auto;width:100%}
-.alad-radial svg{display:block;width:100%;height:auto}
-.alad-stats{display:flex;flex-direction:column;gap:0}
-.astat{padding:24px 0;border-bottom:1px solid var(--hairline);flex:1;min-width:180px}
-.astat:last-child{border-bottom:0}
-.astat .k{font-family:var(--serif);font-weight:300;font-size:clamp(32px,3vw,42px);line-height:1}
-.astat .l{color:var(--text-2);font-size:12.5px;line-height:1.6;margin-top:10px}
+.alad-radial{position:relative;max-width:560px;margin:0 auto;width:100%}
+.alad-radial svg{display:block;width:100%;height:auto;overflow:visible}
+/* bare numerals, per the board — no card chrome */
+.alad-stats{display:flex;flex-direction:column;gap:34px}
+.astat{flex:1;min-width:170px}
+.astat .k{font-family:var(--serif);font-weight:300;font-size:clamp(36px,3.4vw,48px);line-height:1}
+.astat .l{color:var(--text-2);font-size:12.5px;line-height:1.65;margin-top:12px;max-width:230px}
+/* radial: cascade reveal + hover */
+.alad-radial .seg{opacity:0;transform:rotate(-5deg);transform-origin:280px 280px;
+  transition:opacity .8s var(--ease) var(--sd,0s),transform .8s var(--ease) var(--sd,0s),translate .45s var(--ease)}
+.alad-radial.in .seg{opacity:1;transform:none}
+.alad-radial .seg path{transition:fill .4s var(--ease)}
+.alad-radial .seg text{transition:fill .4s var(--ease)}
+.alad-radial.in .seg:hover{translate:var(--tx) var(--ty)}
+.alad-radial .seg:hover path{fill:rgba(255,255,255,.075)}
+.alad-radial .seg:hover text{fill:#FFFFFF}
+.alad-radial .dotring,.alad-radial .comp-arc{opacity:0;transition:opacity 1s var(--ease) .5s}
+.alad-radial.in .dotring,.alad-radial.in .comp-arc{opacity:1}
+.alad-radial .core-ring{stroke-dasharray:704;stroke-dashoffset:704;transition:stroke-dashoffset 1.6s var(--ease) .7s}
+.alad-radial.in .core-ring{stroke-dashoffset:0}
+.alad-radial .core{opacity:0;transition:opacity .9s var(--ease) .9s}
+.alad-radial.in .core{opacity:1}
 
 /* ============================================================
-   11 — Funnel (p12)
+   11 — Stock-selection pipeline (pinned particle stage)
    ============================================================ */
-.funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin-bottom:14px}
-@media(max-width:960px){.funnel{grid-template-columns:1fr}}
-.fstage{padding:26px 22px;position:relative}
-.fstage .fn{font-family:var(--serif);font-style:italic;font-weight:300;font-size:13px;color:var(--muted);display:block;margin-bottom:14px}
-.fstage h4{font-size:13.5px;font-weight:500;letter-spacing:.01em;margin-bottom:8px;line-height:1.4}
-.fstage p{font-size:12px;color:var(--text-2);line-height:1.6}
-.fstage .fdots{margin-top:18px;height:40px}
-.fstage .fdots svg{display:block;height:100%;width:auto}
-.fstage.scored::before{
-  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:var(--beam);opacity:.5;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+.pipe{height:320vh;position:relative}
+.pipe-stage{position:sticky;top:0;height:100vh;overflow:hidden}
+#pipeCanvas{position:absolute;inset:0;width:100%;height:100%}
+.pipe-head{position:absolute;top:96px;left:0;right:0;z-index:3;text-align:center;pointer-events:none}
+.pipe-head .eyebrow{margin-bottom:14px}
+.pipe-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3.4vw,42px)}
+.pipe-head h2 em{font-style:italic}
+.pipe-gates{position:absolute;inset:0;z-index:2;pointer-events:none}
+.pgate{position:absolute;top:25%;transform:translateX(-50%);text-align:center;opacity:0;transition:opacity .6s var(--ease)}
+.pgate.on{opacity:1}
+.pgate .pk{display:block;font-family:var(--serif);font-weight:300;font-size:clamp(19px,2.1vw,28px);color:var(--white);white-space:nowrap}
+.pgate.beam .pk{background:var(--beam);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pgate .pl{display:block;margin:8px auto 0;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;max-width:140px;line-height:1.7}
+@media(max-width:720px){
+  .pipe-head{top:88px}
+  .pgate{top:30%}
+  .pgate .pk{font-size:12.5px}
+  .pgate .pl{display:none}
 }
-.f-engine{display:grid;grid-template-columns:1.1fr 2fr;gap:10px;align-items:stretch}
-@media(max-width:960px){.f-engine{grid-template-columns:1fr}}
-.f-out{
-  padding:34px 28px;display:flex;flex-direction:column;justify-content:center;text-align:center;position:relative;overflow:hidden;
+.pipe-cap{
+  position:absolute;left:40px;bottom:56px;max-width:420px;z-index:3;
+  padding:24px 26px;pointer-events:none;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .45s var(--ease),transform .45s var(--ease);
 }
-.f-out::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1.2px;background:var(--beam);opacity:.7;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.f-out .fig-cap{margin-bottom:12px}
-.f-out h4{font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.25}
-.f-eng-in{padding:28px;display:flex;flex-direction:column}
-.f-eng-in h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--white);margin-bottom:18px}
+.pipe-cap.on{opacity:1;transform:none}
+@media(max-width:720px){.pipe-cap{left:24px;right:24px;max-width:none;padding:18px 20px}}
+.pipe-cap .n{font-family:var(--serif);font-style:italic;font-weight:300;color:var(--muted);font-size:13px;letter-spacing:.06em;margin-bottom:8px;display:block}
+.pipe-cap h3{font-family:var(--serif);font-weight:300;font-size:21px;line-height:1.3;margin-bottom:8px}
+.pipe-cap p{color:var(--text-2);font-size:12.5px;line-height:1.65}
+.pipe-progress{position:absolute;right:44px;bottom:56px;z-index:3;display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+@media(max-width:720px){.pipe-progress{display:none}}
+.pipe-progress span{font-size:10px;letter-spacing:.2em;color:var(--muted);font-weight:500;transition:color .4s;text-transform:uppercase}
+.pipe-progress span.on{color:var(--white)}
+.pipe-outcome{
+  position:absolute;left:88%;top:68%;transform:translate(-50%,8px);z-index:3;text-align:center;
+  pointer-events:none;opacity:0;transition:opacity .6s var(--ease),transform .6s var(--ease);
+}
+.pipe-outcome.on{opacity:1;transform:translate(-50%,0)}
+.pipe-outcome .fig-cap{margin-bottom:8px}
+.pipe-outcome h4{font-family:var(--serif);font-weight:300;font-size:clamp(18px,1.8vw,24px);line-height:1.3}
+.pipe-outcome h4 em{font-style:italic}
+@media(max-width:720px){.pipe-outcome{left:auto;right:18px;transform:none;text-align:right}.pipe-outcome.on{transform:none}}
+.pipe-engine{
+  position:absolute;left:50%;bottom:52px;z-index:3;width:min(92vw,780px);
+  padding:20px 24px;transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  transition:opacity .55s var(--ease),transform .55s var(--ease);
+}
+.pipe-engine.on{opacity:1;transform:translate(-50%,0)}
+.pipe-engine h4{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:14px;text-align:center}
 .f-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media(max-width:680px){.f-inputs{grid-template-columns:1fr}}
-.f-in{border:1px solid var(--hairline);border-radius:10px;padding:16px 16px}
-.f-in h5{font-size:12.5px;font-weight:500;margin-bottom:6px}
+@media(max-width:680px){.f-inputs{grid-template-columns:1fr;gap:8px}}
+.f-in{border:1px solid var(--hairline);border-radius:10px;padding:14px 16px}
+.f-in h5{font-size:12.5px;font-weight:500;margin-bottom:5px}
 .f-in p{font-size:11.5px;color:var(--muted);line-height:1.55}
+@media(max-height:820px){.pipe-cap{bottom:40px}.pipe-engine{bottom:40px}}
 
 /* ============================================================
    Close + footer
@@ -637,12 +727,12 @@ footer{border-top:1px solid var(--hairline);padding:80px 0 60px}
         <div class="venn" id="venn"></div>
         <div class="venn-tagline">
           <p class="t1">Systematic Active <em style="font-style:italic">Equity</em></p>
-          <p class="t2">Sharpen insights &middot; Smarter decisions &middot; Bigger wins</p>
+          <p class="t2">Sharpen insights<span style="white-space:nowrap"> &middot; Smarter decisions</span><span style="white-space:nowrap"> &middot; Bigger wins</span></p>
         </div>
       </div>
-      <div class="rv" style="--d:.12s">
-        <h3 class="why-head">Why does this matter to <em>you?</em></h3>
-        <ul class="why-list" id="whyList"></ul>
+      <div class="why-card glass tilt rv" style="--d:.12s"><div class="sheen"></div>
+        <h3 class="why-head">Why does this matter to&nbsp;<em>you?</em></h3>
+        <ol class="why-num" id="whyList"></ol>
         <p class="powered">Investment expertise, <b>powered by technology.</b></p>
       </div>
     </div>
@@ -722,12 +812,12 @@ footer{border-top:1px solid var(--hairline);padding:80px 0 60px}
     <div class="hubs">
       <div class="hub-panel glass tilt rv"><div class="sheen"></div>
         <p class="fig-cap">Traditional approach</p>
-        <div class="hub" id="hubTrad"></div>
+        <div class="hub flowviz" id="hubTrad"></div>
         <p class="hub-tagband">Sees only part of the picture</p>
       </div>
       <div class="hub-panel glass tilt rv" style="--d:.1s"><div class="sheen"></div>
         <p class="fig-cap">Modern approach</p>
-        <div class="hub" id="hubAlt"></div>
+        <div class="hub flowviz" id="hubAlt"></div>
         <p class="hub-tagband comp">Comprehensive</p>
       </div>
     </div>
@@ -809,37 +899,42 @@ footer{border-top:1px solid var(--hairline);padding:80px 0 60px}
       <h2 class="rv" style="--d:.08s">We will leverage Aladdin&reg;<sup>4</sup>, BlackRock's technology platform that unifies the end-to-end investment management <em>process.</em></h2>
     </div>
     <div class="alad">
-      <div class="alad-left rv">
-        <h3>Why does this matter to <em>you?</em></h3>
-        <p class="body-2" style="font-size:13.5px;margin-bottom:20px">Provides a common data language to enable scale, provide insights, and support sustainable business growth.</p>
-        <ul class="why-list" id="aladWhy" style="font-size:13px"></ul>
-      </div>
+      <div class="alad-stats rv" id="aladStats"></div>
       <div class="alad-radial rv" style="--d:.1s" id="aladRadial"></div>
-      <div class="alad-stats rv" style="--d:.18s" id="aladStats"></div>
+      <div class="why-card glass rv" style="--d:.18s">
+        <h3 class="why-head" style="font-size:24px">Why does this matter to&nbsp;<em>you?</em></h3>
+        <p class="lede">Provides a common data language to enable scale, provide insights, and support sustainable business growth.</p>
+        <ol class="why-num" id="aladWhy"></ol>
+      </div>
     </div>
     <p class="fine src rv" id="aladSrc"></p>
   </div>
 </section>
 
-<!-- ============ 11 · FUNNEL ============ -->
-<section class="ch" id="ch11">
+<!-- ============ 11 · PIPELINE (pinned particle stage) ============ -->
+<section class="pipe" id="ch11">
+  <div class="pipe-stage">
+    <canvas id="pipeCanvas"></canvas>
+    <div class="pipe-head">
+      <p class="eyebrow">11 &middot; The Construction &nbsp;&middot;&nbsp; Figure 04</p>
+      <h2>Stock selection, from universe to <em>portfolio.</em></h2>
+    </div>
+    <div class="pipe-gates" id="pipeGates"></div>
+    <div class="pipe-cap glass" id="pipeCap"><span class="n"></span><h3></h3><p></p></div>
+    <div class="pipe-progress" id="pipeProgress"></div>
+    <div class="pipe-outcome" id="pipeOutcome">
+      <p class="fig-cap">The outcome</p>
+      <h4>JioBlackRock<br><em>Flexi Cap Fund</em></h4>
+    </div>
+    <div class="pipe-engine glass" id="pipeEngine">
+      <h4>Aladdin&reg; optimization engine</h4>
+      <div class="f-inputs" id="fInputs"></div>
+    </div>
+  </div>
+</section>
+<section class="ch" style="padding:44px 0 90px">
   <div class="wrap">
-    <div class="ch-head">
-      <p class="eyebrow rv">11 &middot; The Construction</p>
-      <h2 class="rv" style="--d:.08s">Stock selection, from universe to <em>portfolio.</em></h2>
-    </div>
-    <div class="funnel" id="funnelStages"></div>
-    <div class="f-engine">
-      <div class="f-out glass rv">
-        <p class="fig-cap">The outcome</p>
-        <h4>JioBlackRock<br><em>Flexi Cap Fund</em></h4>
-      </div>
-      <div class="f-eng-in glass rv" style="--d:.08s">
-        <h4>Aladdin&reg; optimization engine</h4>
-        <div class="f-inputs" id="fInputs"></div>
-      </div>
-    </div>
-    <p class="fine src rv">Aladdin&reg; is BlackRock's proprietary platform which is licensed to the JioBlackRock AMC.</p>
+    <p class="fine src rv">Aladdin&reg; is BlackRock's proprietary platform which is licensed to the JioBlackRock AMC. Stage counts are as published in the source presentation; the particle flow is illustrative.</p>
   </div>
 </section>
 
@@ -1070,7 +1165,8 @@ function dotIcon(kind, light=false){
   $('#jioList').innerHTML=DATA.managers.jio.map(x=>`<li>${x}</li>`).join('');
   $('#brList').innerHTML=DATA.managers.blackrock.map(x=>`<li>${x}</li>`).join('');
   $('#mgrSrc').innerHTML=DATA.managers.src;
-  $('#whyList').innerHTML=DATA.venn.why.map(x=>`<li><span>${x}</span></li>`).join('');
+  const numRow=(x,i)=>`<li><span class="n">${String(i+1).padStart(2,'0')}</span><span>${x}</span></li>`;
+  $('#whyList').innerHTML=DATA.venn.why.map(numRow).join('');
   $('#saeCaptions').innerHTML=DATA.sae.captions.map((c,i)=>`
     <div class="sae-cap glass" data-i="${i}"><span class="n">${c.n}</span><h3>${c.h}</h3><p>${c.p}</p></div>`).join('');
   $('#saeChip').innerHTML=`<i></i>${DATA.sae.chip}`;
@@ -1088,15 +1184,10 @@ function dotIcon(kind, light=false){
       <div class="doticon">${dotIcon(c.icon)}</div><h3>${c.h}</h3>
       <ul>${c.items.map(x=>`<li>${x}</li>`).join('')}</ul>
     </div>`).join('');
-  $('#aladWhy').innerHTML=DATA.aladdin.why.map(x=>`<li><span>${x}</span></li>`).join('');
+  $('#aladWhy').innerHTML=DATA.aladdin.why.map(numRow).join('');
   $('#aladStats').innerHTML=DATA.aladdin.stats.map(s=>`
     <div class="astat"><div class="k"><span class="count" data-v="${s.value}" data-p="${s.prefix}" data-s="${s.suffix}">${s.prefix}0${s.suffix}</span></div><div class="l">${s.label}</div></div>`).join('');
   $('#aladSrc').innerHTML=DATA.aladdin.src;
-  $('#funnelStages').innerHTML=DATA.funnel.map((f,i)=>`
-    <div class="fstage glass tilt rv ${f.cls}" style="--d:${i*.06}s"><div class="sheen"></div>
-      <span class="fn">${f.n}</span><h4>${f.h}</h4><p>${f.p}</p>
-      <div class="fdots">${dotIcon(f.dots)}</div>
-    </div>`).join('');
   $('#fInputs').innerHTML=DATA.fInputs.map(f=>`<div class="f-in"><h5>${f.h}</h5><p>${f.p}</p></div>`).join('');
   $('#footSources').innerHTML=DATA.footer.sources;
   $('#footDisclosures').innerHTML=DATA.footer.disclosures;
@@ -1144,7 +1235,7 @@ function dotIcon(kind, light=false){
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
   }),{threshold:.12,rootMargin:'0px 0px -8% 0px'});
-  $$('.rv, .mask, .hm').forEach(el=>io.observe(el));
+  $$('.rv, .mask, .hm, .venn, .alad-radial, .flowviz').forEach(el=>io.observe(el));
 })();
 
 /* ---------- counters ---------- */
@@ -1172,85 +1263,143 @@ $$('[data-ring]').forEach(el=>{
   el.insertAdjacentHTML('afterbegin',`<svg viewBox="0 0 76 76">${dots}</svg>`);
 });
 
-/* ---------- Venn (03) ---------- */
+/* ---------- SAE lens (03) — intersection made literal ---------- */
 (function venn(){
-  const W=640,H=430,r=158;
-  const c1={x:230,y:200},c2={x:410,y:200};
-  const ringDots=(c,tone)=>{let s='';const n=64;
-    for(let i=0;i<n;i++){const a=i/n*6.2832;
-      s+=`<circle cx="${c.x+r*Math.cos(a)}" cy="${c.y+r*Math.sin(a)}" r="1.5" fill="rgba(255,255,255,${tone})"/>`}
-    return s};
-  const listSVG=(items,x,anchor)=>items.map((t,i)=>
-    `<text x="${x}" y="${216 + i*24 - (items.length-1)*12}" text-anchor="${anchor}" font-size="12.5" fill="#B4B2B1" font-family="Geist,sans-serif">${t}</text>`).join('');
-  $('#venn').innerHTML=`
+  const el=$('#venn'); if(!el)return;
+  const W=640,H=520,cx=320,cy=248;
+  const RX=298,RY=212,N=72;
+  /* dotted ring, ignition runs clockwise from the crown */
+  let dots='';
+  for(let i=0;i<N;i++){
+    const a=-Math.PI/2+i/N*6.2832;
+    const x=cx+RX*Math.cos(a),y=cy+RY*Math.sin(a);
+    const o=(.26+.38*((i*7)%5)/5).toFixed(2);
+    dots+=`<circle class="ring-dot" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6"
+      fill="#FFFFFF" style="--rd:${i*16}ms;--ro:${o}" data-o="${o}"/>`;
+  }
+  /* vesica: intersection of two r=210 circles offset ±130 from centre */
+  const r=210,d=130,h=Math.sqrt(r*r-d*d);          /* ≈165 */
+  const lens=`M ${cx} ${cy-h} A ${r} ${r} 0 0 1 ${cx} ${cy+h} A ${r} ${r} 0 0 1 ${cx} ${cy-h} Z`;
+  /* shared heading baseline; lists top-aligned beneath, composite registered on the lens midline */
+  const list=(items,x,label,delay)=>`
+    <g class="side" style="--sd:${delay}s">
+      <text x="${x}" y="${cy-118}" text-anchor="middle" font-size="19" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">${label}</text>
+      ${items.map((t,i)=>`<text x="${x}" y="${cy-82+i*26}" text-anchor="middle" font-size="12.5" fill="#B4B2B1" font-family="Geist,sans-serif">${t}</text>`).join('')}
+    </g>`;
+  el.innerHTML=`
   <svg viewBox="0 0 ${W} ${H}">
     <defs>
-      <clipPath id="vclip"><circle cx="${c1.x}" cy="${c1.y}" r="${r}"/></clipPath>
-      <linearGradient id="vbeam" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#D66001"/><stop offset=".34" stop-color="#F1F0A8"/>
-        <stop offset=".66" stop-color="#9FFFFB"/><stop offset="1" stop-color="#4757EA"/>
+      <linearGradient id="lensGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4757EA" stop-opacity=".92"/>
+        <stop offset=".28" stop-color="#2A3260" stop-opacity=".88"/>
+        <stop offset=".52" stop-color="#131317" stop-opacity=".92"/>
+        <stop offset=".74" stop-color="#5C3A12" stop-opacity=".88"/>
+        <stop offset="1" stop-color="#D66001" stop-opacity=".95"/>
       </linearGradient>
-      <radialGradient id="vglow" cx=".5" cy=".5" r=".5">
-        <stop offset="0" stop-color="rgba(255,255,255,.28)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+      <radialGradient id="lensSheen" cx=".5" cy=".3" r=".62">
+        <stop offset="0" stop-color="rgba(255,255,255,.12)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
       </radialGradient>
+      <radialGradient id="lensGlowG" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="rgba(255,255,255,.30)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+      <clipPath id="lensClip"><path d="${lens}"/></clipPath>
     </defs>
-    ${ringDots(c1,'.35')}
-    ${ringDots(c2,'.35')}
-    <g clip-path="url(#vclip)">
-      <circle cx="${c2.x}" cy="${c2.y}" r="${r}" fill="url(#vbeam)" opacity=".07"/>
-      <circle cx="${c2.x}" cy="${c2.y}" r="${r}" fill="url(#vglow)" opacity=".65"/>
+    ${dots}
+    <g class="lens-shape">
+      <path d="${lens}" fill="url(#lensGrad)" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+      <path d="${lens}" fill="url(#lensSheen)"/>
+      <circle id="lensGlow" clip-path="url(#lensClip)" cx="${cx}" cy="${cy}" r="120" fill="url(#lensGlowG)" opacity="0"/>
     </g>
-    <text x="${c1.x-96}" y="96" text-anchor="middle" font-size="19" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">Human</text>
-    <text x="${c2.x+96}" y="96" text-anchor="middle" font-size="19" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">Machine</text>
-    ${listSVG(['Fundamental research','Theme definition','Fund manager views','Risk management','Governance insights'], c1.x-96, 'middle')}
-    ${listSVG(['AI and machine learning','Alternative data','Geolocations','Online search activity','Macro trends','Broker reports','Consumer transactions'], c2.x+96, 'middle')}
-    <circle cx="320" cy="200" r="3" fill="#FFFFFF"/>
-    <line x1="320" y1="203" x2="320" y2="382" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
-    <circle cx="320" cy="388" r="4" fill="url(#vbeam)"/>
-  </svg>`;
+    ${list(DATA.venn.human,128,'Humans',.85)}
+    ${list(DATA.venn.machine,512,'Machine',1)}
+    <circle class="plumb-dot" cx="${cx}" cy="${cy}" r="3" fill="#FFFFFF"/>
+    <line class="plumb" x1="${cx}" y1="${cy+7}" x2="${cx}" y2="${cy+236}" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+    <circle class="plumb-dot" cx="${cx}" cy="${cy+242}" r="4" fill="#FFFFFF"/>
+  </svg>
+  <div class="venn-lists">
+    <div><h4>Humans</h4><ul>${DATA.venn.human.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+    <div><h4>Machine</h4><ul>${DATA.venn.machine.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+  </div>`;
+  /* cursor: ring dots brighten near the pointer, lens glow leans toward it */
+  if(finePointer&&!reduced){
+    const svg=el.querySelector('svg'),glow=el.querySelector('#lensGlow');
+    const ringDots=[...el.querySelectorAll('.ring-dot')];
+    let raf=null,mx=0,my=0,inside=false,revealed=false;
+    setTimeout(()=>{revealed=true},2600);
+    function apply(){
+      raf=null;
+      if(!revealed)return;
+      for(const dt of ringDots){
+        const dx=+dt.getAttribute('cx')-mx,dy=+dt.getAttribute('cy')-my;
+        const k=inside?Math.exp(-(dx*dx+dy*dy)/(130*130)):0;
+        dt.style.opacity=Math.min(1,(+dt.dataset.o)+k*.85).toFixed(3);
+      }
+      glow.setAttribute('cx',mx);glow.setAttribute('cy',my);
+      glow.setAttribute('opacity',inside?'.5':'0');
+    }
+    svg.addEventListener('pointermove',e=>{
+      const b=svg.getBoundingClientRect();
+      mx=(e.clientX-b.left)/b.width*W;my=(e.clientY-b.top)/b.height*H;
+      inside=true;if(!raf)raf=requestAnimationFrame(apply);
+    });
+    svg.addEventListener('pointerleave',()=>{inside=false;if(!raf)raf=requestAnimationFrame(apply)});
+  }
 })();
 
-/* ---------- hub-and-spoke (06) ---------- */
-function hub(el, items, beam){
-  const W=440,H=340,cy=H/2,R=50,BW=136,BH=32;
-  const few=items.length<=3;
-  const cx=few?120:W/2;
+/* ---------- data-source coverage flow (06) — the gap made visible ---------- */
+function flow(el, dim, bright, beam, total){
+  const W=460,H=340,hx=346,hy=170,covR=64,covN=36;
+  const rows=[...dim.map(t=>({t,dim:true})),...bright.map(t=>({t,dim:false}))];
+  const n=rows.length,lit=n;
+  const sp=n<=4?52:(n>1?Math.min(34,(H-72)/(n-1)):0);
+  const y0=hy-((n-1)*sp)/2;
   let s='';
-  /* hub dotted ring — beam-tinted for the modern approach */
-  const n=44;
-  for(let i=0;i<n;i++){
-    const a=i/n*6.2832;
-    const fill=beam?BEAM[Math.floor(i/n*3.999)]:'rgba(255,255,255,.4)';
-    s+=`<circle cx="${(cx+R*Math.cos(a)).toFixed(1)}" cy="${(cy+R*Math.sin(a)).toFixed(1)}" r="1.6" fill="${fill}"${beam?' opacity=".85"':''}/>`;
-  }
-  s+=`<circle cx="${cx}" cy="${cy}" r="${R-13}" fill="rgba(255,255,255,.03)"/>`;
-  const label=beam?['Alternative','data']:['Traditional','data'];
-  s+=`<text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="13.5" fill="#FFFFFF" font-family="Denton,Georgia,serif">
-      <tspan x="${cx}" dy="0">${label[0]}</tspan><tspan x="${cx}" dy="16">${label[1]}</tspan></text>`;
-  /* spokes + tags */
-  items.forEach((t,i)=>{
-    let bx,by,sx,sy,ex,ey;
-    if(few){
-      by=cy-((items.length-1)*56)/2+i*56;
-      bx=W-BW-24;
-      sx=cx+R*Math.cos((by-cy)/140); sy=cy+(by-cy)*.35;
-      ex=bx; ey=by;
-    } else {
-      const side=i<items.length/2?-1:1;
-      const row=i%(items.length/2);
-      by=cy-56+row*56;
-      bx=side<0?18:W-BW-18;
-      sx=cx+side*R; sy=cy+(by-cy)*.35;
-      ex=side<0?bx+BW:bx; ey=by;
-    }
-    s+=`<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex}" y2="${ey}" stroke="rgba(255,255,255,.13)" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round"/>`;
-    s+=`<rect x="${bx}" y="${by-BH/2}" rx="9" width="${BW}" height="${BH}" fill="rgba(255,255,255,.028)" stroke="rgba(255,255,255,.09)"/>
-        <text x="${bx+BW/2}" y="${by+3.5}" text-anchor="middle" font-size="10.5" fill="#B4B2B1" font-family="Geist,sans-serif">${t}</text>`;
+  rows.forEach((row,i)=>{
+    const y=y0+i*sp, ay=hy+(y-hy)*.22;
+    const bi=row.dim?0:i-dim.length;
+    const col=row.dim
+      ?'rgba(255,255,255,.35)'
+      :(beam?BEAM[Math.floor(bi/Math.max(1,bright.length)*3.999)]:'rgba(255,255,255,.8)');
+    const edge=row.dim?'rgba(255,255,255,.14)':(beam?col:'rgba(255,255,255,.3)');
+    s+=`<g class="src">
+      <rect x="0" y="${y-sp/2}" width="${hx-covR-4}" height="${sp}" fill="transparent" pointer-events="all"/>
+      <path class="fedge" d="M 156 ${y} C 216 ${y}, 246 ${ay}, ${hx-covR-8} ${ay.toFixed(1)}"
+        fill="none" stroke="${edge}" stroke-width="1" opacity="${row.dim?.7:.85}" style="--fd:${(.12+i*.13).toFixed(2)}s"/>
+      <circle class="fnode" cx="150" cy="${y}" r="${row.dim?2.4:3.2}" fill="${col}" style="--fd:${(.06+i*.13).toFixed(2)}s"/>
+      <text class="fnode flab" x="136" y="${y+3.5}" text-anchor="end" font-size="${row.dim?10.5:11.5}"
+        fill="${row.dim?'#6d6d6d':'#B4B2B1'}" font-family="Geist,sans-serif" style="--fd:${(.06+i*.13).toFixed(2)}s">${row.t}</text>
+    </g>`;
   });
+  /* coverage gauge: dotted ring — only the covered share ignites */
+  const litN=Math.round(covN*lit/total);
+  for(let i=0;i<covN;i++){
+    const a=-Math.PI/2+i/covN*6.2832;
+    s+=`<circle class="cov-dot ${i<litN?'on':''}" cx="${(hx+covR*Math.cos(a)).toFixed(1)}" cy="${(hy+covR*Math.sin(a)).toFixed(1)}" r="1.7"
+      fill="#FFFFFF" style="--fd:${(1+i*.028).toFixed(2)}s"/>`;
+  }
+  s+=`<circle cx="${hx}" cy="${hy}" r="${covR-16}" fill="rgba(255,255,255,.028)" stroke="rgba(255,255,255,.07)"/>`;
+  s+=`<text class="cov-count" x="${hx}" y="${hy+2}" text-anchor="middle" font-size="23" fill="#FFFFFF"
+      font-family="Denton,Georgia,serif" font-weight="300">0 / ${total}</text>
+    <text x="${hx}" y="${hy+22}" text-anchor="middle" font-size="8" letter-spacing="1.8" fill="#8a8a8a"
+      font-family="Geist,sans-serif" font-weight="500">SIGNAL SOURCES</text>`;
   el.innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+  /* measure real edge lengths for the draw-in */
+  el.querySelectorAll('.fedge').forEach(p=>p.style.setProperty('--fl',p.getTotalLength().toFixed(1)+'px'));
+  /* count ticks up when the panel reveals */
+  const cnt=el.querySelector('.cov-count');
+  new IntersectionObserver((es,o)=>{
+    if(!es[0].isIntersecting)return;o.disconnect();
+    if(reduced){cnt.textContent=`${lit} / ${total}`;return}
+    const t0=performance.now(),dur=1300;
+    (function tick(t){
+      const k=clamp((t-t0)/dur,0,1);
+      cnt.textContent=`${Math.round(lit*(1-Math.pow(1-k,3)))} / ${total}`;
+      if(k<1)requestAnimationFrame(tick);
+    })(t0);
+  },{threshold:.4}).observe(el);
 }
-hub($('#hubTrad'), DATA.ch6.trad, false);
-hub($('#hubAlt'), DATA.ch6.alt, true);
+flow($('#hubTrad'), [], DATA.ch6.trad, false, DATA.ch6.trad.length+DATA.ch6.alt.length);
+flow($('#hubAlt'), DATA.ch6.trad, DATA.ch6.alt, true, DATA.ch6.trad.length+DATA.ch6.alt.length);
 
 /* ---------- Exhibit A · 3-series line chart ---------- */
 (function lineChart(){
@@ -1343,47 +1492,60 @@ hub($('#hubAlt'), DATA.ch6.alt, true);
   $('#hmScaleBar').style.background=`linear-gradient(90deg,${color(min).bg},${color(min*0.2).bg},${color(12).bg},${color(max*.6).bg},${color(max).bg})`;
 })();
 
-/* ---------- Aladdin radial (10) ---------- */
+/* ---------- Aladdin radial (10) — process ring per the board ---------- */
 (function aladdin(){
   const A=DATA.aladdin;
-  const W=520,H=520,cx=W/2,cy=H/2;
-  const R1=150,R2=204;  /* segment band */
-  const segN=A.segments.length,gap=.075;
-  const arc=(r,a0,a1)=>{
-    const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
-    const large=(a1-a0)>Math.PI?1:0;
-    return {x0,y0,x1,y1,large}};
-  let s='';
-  /* dotted outer particle ring */
-  for(let i=0;i<80;i++){const a=i/80*6.2832;
-    s+=`<circle cx="${cx+238*Math.cos(a)}" cy="${cy+238*Math.sin(a)}" r="1.3" fill="rgba(255,255,255,${.12+.2*((i*7)%5)/5})"/>`}
-  /* segments */
+  const W=560,H=560,cx=280,cy=280;
+  const R1=180,R2=236;          /* chevron segment band */
+  const RM=(R1+R2)/2;           /* segment label radius */
+  const RD=152;                 /* dotted idle ring */
+  const RC=134;                 /* compliance crown text radius */
+  const RCC=112;                /* centre beam ring (dasharray 704 ≈ 2πr) */
+  const segN=A.segments.length,gap=.075,skew=.05;
+  const P=(r,a)=>`${(cx+r*Math.cos(a)).toFixed(2)} ${(cy+r*Math.sin(a)).toFixed(2)}`;
+  let defs='',s='';
+  /* gradientTransform compensates the core-ring's rotate(-90) (draw-in start at 12 o'clock)
+     so the beam still reads vertically: blue crown → orange base */
+  defs+=`<linearGradient id="abeamV" x1="0" y1="0" x2="0" y2="1" gradientTransform="rotate(90 .5 .5)">
+    <stop offset="0" stop-color="#4757EA"/><stop offset=".38" stop-color="#9FFFFB"/>
+    <stop offset=".62" stop-color="#F1F0A8"/><stop offset="1" stop-color="#D66001"/></linearGradient>`;
+  /* chevron process segments, labels set along the arc */
   A.segments.forEach((label,i)=>{
-    const a0=-Math.PI/2 + i*(6.2832/segN)+gap/2;
-    const a1=-Math.PI/2 + (i+1)*(6.2832/segN)-gap/2;
-    const o=arc(R2,a0,a1),inn=arc(R1,a1,a0);
-    s+=`<path d="M ${o.x0} ${o.y0} A ${R2} ${R2} 0 ${o.large} 1 ${o.x1} ${o.y1} L ${inn.x0} ${inn.y0} A ${R1} ${R1} 0 ${o.large} 0 ${inn.x1} ${inn.y1} Z"
-        fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.09)" stroke-width="1"/>`;
-    const mid=(a0+a1)/2,tr=(R1+R2)/2;
-    const words=label.split(' ');
-    const tx=cx+tr*Math.cos(mid),ty=cy+tr*Math.sin(mid);
-    const lh=13;
-    s+=`<text x="${tx}" y="${ty-(words.length-1)*lh/2+4}" text-anchor="middle" font-size="11" fill="#B4B2B1" font-family="Geist,sans-serif" font-weight="500">`
-      +words.map((w,wi)=>`<tspan x="${tx}" dy="${wi===0?0:lh}">${w}</tspan>`).join('')+`</text>`;
+    const a0=-Math.PI/2+i*(6.2832/segN)+gap/2;
+    const a1=-Math.PI/2+(i+1)*(6.2832/segN)-gap/2;
+    const large=0;
+    const d=`M ${P(R2,a0)} A ${R2} ${R2} 0 ${large} 1 ${P(R2,a1)}
+             L ${P(R1,a1-skew)} A ${R1} ${R1} 0 ${large} 0 ${P(R1,a0-skew)} Z`;
+    const mid=(a0+a1)/2;
+    /* reverse the label path in the lower half so type reads upright */
+    const lower=Math.sin(mid)>0;
+    const lp=lower
+      ?`M ${P(RM-4,a1)} A ${RM-4} ${RM-4} 0 0 0 ${P(RM-4,a0)}`
+      :`M ${P(RM+4,a0)} A ${RM+4} ${RM+4} 0 0 1 ${P(RM+4,a1)}`;
+    const tx=(Math.cos(mid)*3).toFixed(1),ty=(Math.sin(mid)*3).toFixed(1);
+    s+=`<g class="seg" style="--sd:${.12+i*.09}s;--tx:${tx}px;--ty:${ty}px">
+      <path d="${d}" fill="rgba(255,255,255,.028)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+      <defs><path id="segp${i}" d="${lp}"/></defs>
+      <text font-size="11" letter-spacing="1.6" fill="#8F8F8F" font-family="Geist,sans-serif" font-weight="500">
+        <textPath href="#segp${i}" startOffset="50%" text-anchor="middle" dominant-baseline="middle">${label.toUpperCase()}</textPath>
+      </text></g>`;
   });
-  /* inner dashed ring — compliance */
-  s+=`<circle cx="${cx}" cy="${cy}" r="${R1-22}" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="2 7" stroke-linecap="round"/>`;
-  s+=`<text x="${cx}" y="${cy-R1+40}" text-anchor="middle" font-size="10" letter-spacing="2.4" fill="#B4B2B1" font-family="Geist,sans-serif" font-weight="500">${A.innerRing.toUpperCase()}</text>`;
-  /* beam-ringed centre */
-  s+=`<defs><linearGradient id="abeam" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#D66001"/><stop offset=".34" stop-color="#F1F0A8"/>
-    <stop offset=".66" stop-color="#9FFFFB"/><stop offset="1" stop-color="#4757EA"/></linearGradient></defs>`;
-  s+=`<circle cx="${cx}" cy="${cy}" r="84" fill="none" stroke="url(#abeam)" stroke-width="1.4" opacity=".85"/>`;
-  s+=`<circle cx="${cx}" cy="${cy}" r="80" fill="#0A0A0A" stroke="rgba(255,255,255,.08)"/>`;
+  /* dotted ring, slow idle rotation */
+  let ring='';
+  for(let i=0;i<56;i++){const a=i/56*6.2832;
+    ring+=`<circle cx="${(cx+RD*Math.cos(a)).toFixed(1)}" cy="${(cy+RD*Math.sin(a)).toFixed(1)}" r="1.3" fill="rgba(255,255,255,${(.14+.22*((i*7)%5)/5).toFixed(2)})"/>`}
+  s+=`<g class="dotring">${ring}${reduced?'':`<animateTransform attributeName="transform" type="rotate" from="0 ${cx} ${cy}" to="360 ${cx} ${cy}" dur="150s" repeatCount="indefinite"/>`}</g>`;
+  /* compliance & oversight, curved over the crown */
+  s+=`<defs><path id="compArc" d="M ${P(RC,-Math.PI+.55)} A ${RC} ${RC} 0 0 1 ${P(RC,-.55)}"/></defs>
+    <text class="comp-arc" font-size="10.5" letter-spacing="3" fill="#B4B2B1" font-family="Geist,sans-serif" font-weight="500">
+      <textPath href="#compArc" startOffset="50%" text-anchor="middle">${A.innerRing.toUpperCase()}</textPath></text>`;
+  /* centre: vertical-beam ring drawing itself in, smoked core */
+  s+=`<circle class="core-ring" cx="${cx}" cy="${cy}" r="${RCC}" fill="none" stroke="url(#abeamV)" stroke-width="1.6" opacity=".9" transform="rotate(-90 ${cx} ${cy})"/>`;
+  s+=`<g class="core"><circle cx="${cx}" cy="${cy}" r="${RCC-5}" fill="#0A0A0A" stroke="rgba(255,255,255,.07)"/>`;
   const cw=A.center.split(' ');
-  s+=`<text x="${cx}" y="${cy-10}" text-anchor="middle" font-size="15" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">`
-    +`<tspan x="${cx}" dy="0">${cw.slice(0,2).join(' ')}</tspan><tspan x="${cx}" dy="19">${cw.slice(2).join(' ')}</tspan></text>`;
-  $('#aladRadial').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;
+  s+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="17" fill="#FFFFFF" font-family="Denton,Georgia,serif" font-weight="300">
+      <tspan x="${cx}" dy="0">${cw.slice(0,2).join(' ')}</tspan><tspan x="${cx}" dy="22">${cw.slice(2).join(' ')}</tspan></text></g>`;
+  $('#aladRadial').innerHTML=`<svg viewBox="0 0 ${W} ${H}"><defs>${defs}</defs>${s}</svg>`;
 })();
 
 /* ============================================================
@@ -1642,6 +1804,188 @@ $$('[data-dots]').forEach(cv=>{
   }
   build();addEventListener('resize',build);
   if(reduced){p=1;frame(t0);cancelAnimationFrame(raf);caps[2].classList.add('on');return}
+  new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
+    else{cancelAnimationFrame(raf);raf=null}
+  }).observe(stage);
+})();
+
+/* ============================================================
+   Stock-selection pipeline (11): pinned stage. ~1,000 dots flow
+   left→right: 25% settle out at the liquidity gate, the Nifty 500
+   lens focuses a subset, scored dots take on the beam (blue crown
+   → orange base), the governance wedge screens a few more, and the
+   selected converge into the fund disc. Scroll scrubs the flow.
+   ============================================================ */
+(function pipe(){
+  const sec=$('#ch11'),cv=$('#pipeCanvas');
+  if(!sec||!cv)return;
+  const ctx=cv.getContext('2d');
+  const stage=$('.pipe-stage',sec),capEl=$('#pipeCap'),gatesEl=$('#pipeGates'),
+        progEl=$('#pipeProgress'),outEl=$('#pipeOutcome'),engEl=$('#pipeEngine');
+  const F=DATA.funnel;
+  const ENTRY=.05,GX=[.30,.45,.60,.74],FUNDX=.88;
+  const rnd=i=>{const x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x)};
+  const BEAMRGB=BEAM.map(h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]);
+  let W,H,dpr,dots=[],raf=null,zone=-1,pd=0,fundR=56,t0=performance.now();
+
+  const gateDefs=[
+    {x:.115,k:'~1,000',l:'Universe · standardized data inputs'},
+    {x:GX[0],k:'~750',l:'Liquidity · turnover · feasibility'},
+    {x:GX[1],k:'Nifty 500',l:'TRI lens · representation & risk framing'},
+    {x:GX[2],k:'SAE Signal',l:'Systematic, rules-based scores',beam:true},
+    {x:GX[3],k:'Screen',l:'Corporate governance filter'},
+  ];
+  gatesEl.innerHTML=gateDefs.map((g,i)=>`<div class="pgate${g.beam?' beam':''}" data-g="${i}" style="left:${g.x*100}%">
+    <span class="pk">${g.k}</span><span class="pl">${g.l}</span></div>`).join('');
+  const gateEls=$$('.pgate',gatesEl);
+  progEl.innerHTML=F.map((f,i)=>`<span data-i="${i}">${f.n} — ${f.h}</span>`).join('');
+  const railEls=$$('span',progEl);
+  capEl.innerHTML='<span class="n"></span><h3></h3><p></p>';
+  const capN=$('.n',capEl),capH=$('h3',capEl),capP=$('p',capEl);
+
+  function build(){
+    dpr=Math.min(devicePixelRatio||1,2);
+    W=cv.clientWidth;H=cv.clientHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    fundR=Math.min(56,H*.085);
+    const N=W<720?380:1000;
+    dots=[];let slot=0;
+    for(let i=0;i<N;i++){
+      const d={
+        yS:rnd(i)*2-1,
+        lag:rnd(i+31)*.30,
+        jit:rnd(i+7),
+        die1:rnd(i+13)<.25,
+        in500:rnd(i+17)<.667,
+        die4:rnd(i+23)<.10,
+        slot:-1
+      };
+      if(!d.die1&&d.in500&&!d.die4)d.slot=slot++;
+      dots.push(d);
+    }
+  }
+  const CY=()=>H*.54;
+  const bandW=x=>lerp(H*.155,H*.03,smooth(ENTRY,FUNDX-.02,x));
+
+  function draw(p,tt){
+    ctx.clearRect(0,0,W,H);
+    const cy=CY(),FX=FUNDX*W;
+    const front=lerp(ENTRY,FUNDX,clamp(p*1.32,0,1));
+    /* ---- gates ---- */
+    const g=(f)=>f*W;
+    /* gates fade in ahead of the stream and quiet down once it has passed */
+    const gateA=x=>smooth(x-.16,x-.02,front)*.9*(1-.5*smooth(x+.10,x+.24,front));
+    ctx.lineCap='round';
+    /* liquidity: dotted vertical */
+    let a=gateA(GX[0]);
+    if(a>0){const x=g(GX[0]),B=bandW(GX[0])+16;
+      ctx.strokeStyle=`rgba(255,255,255,${.22*a})`;ctx.lineWidth=1;ctx.setLineDash([1,6]);
+      ctx.beginPath();ctx.moveTo(x,cy-B);ctx.lineTo(x,cy+B);ctx.stroke();ctx.setLineDash([]);}
+    /* lens: vesica outline */
+    a=gateA(GX[1]);
+    if(a>0){const x=g(GX[1]),B=bandW(GX[1])+18;
+      ctx.strokeStyle=`rgba(255,255,255,${.26*a})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x,cy-B);ctx.quadraticCurveTo(x+14,cy,x,cy+B);
+      ctx.quadraticCurveTo(x-14,cy,x,cy-B);ctx.stroke();}
+    /* SAE: vertical beam hairline (blue crown → orange base) */
+    a=gateA(GX[2]);
+    if(a>0){const x=g(GX[2]),B=bandW(GX[2])+16;
+      const gr=ctx.createLinearGradient(0,cy-B,0,cy+B);
+      gr.addColorStop(0,'#4757EA');gr.addColorStop(.38,'#9FFFFB');gr.addColorStop(.62,'#F1F0A8');gr.addColorStop(1,'#D66001');
+      ctx.globalAlpha=.85*a;ctx.strokeStyle=gr;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(x,cy-B);ctx.lineTo(x,cy+B);ctx.stroke();ctx.globalAlpha=1;}
+    /* governance: converging wedge */
+    a=gateA(GX[3]);
+    if(a>0){const x=g(GX[3]),B0=bandW(GX[3]-.02)+18,B1=bandW(GX[3]+.04)*.62;
+      ctx.strokeStyle=`rgba(255,255,255,${.22*a})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x-16,cy-B0);ctx.lineTo(x+18,cy-B1);
+      ctx.moveTo(x-16,cy+B0);ctx.lineTo(x+18,cy+B1);ctx.stroke();}
+    /* fund disc ring */
+    const fr=smooth(.68,.8,p);
+    if(fr>0){
+      const gr=ctx.createLinearGradient(0,cy-fundR-6,0,cy+fundR+6);
+      gr.addColorStop(0,'#4757EA');gr.addColorStop(.38,'#9FFFFB');gr.addColorStop(.62,'#F1F0A8');gr.addColorStop(1,'#D66001');
+      ctx.globalAlpha=.9*fr;ctx.strokeStyle=gr;ctx.lineWidth=1.4;
+      ctx.beginPath();ctx.arc(FX,cy,fundR+8,0,6.2832);ctx.stroke();
+      ctx.globalAlpha=.03*fr;ctx.fillStyle='#FFFFFF';
+      ctx.beginPath();ctx.arc(FX,cy,fundR+8,0,6.2832);ctx.fill();ctx.globalAlpha=1;
+    }
+    /* ---- dots ---- */
+    for(let i=0;i<dots.length;i++){
+      const d=dots[i];
+      const travel=clamp(p*1.32-d.lag,0,1);
+      /* dots spawn as a visible pool spread across the entry zone; per-dot
+         jitter keeps the stream's leading edge soft */
+      const sx=ENTRY-.02+d.jit*.11;
+      const x0=Math.min(lerp(sx,FUNDX,travel)+(d.jit-.5)*.02,FUNDX);
+      if(x0<=ENTRY-.028)continue;
+      let xf=x0,alpha,dy=0;
+      /* deaths settle + fade below their gate */
+      let deadK=0;
+      if(d.die1&&x0>GX[0]){deadK=smooth(GX[0],GX[0]+.07,x0);xf=Math.min(x0,GX[0]+.012+deadK*.008)}
+      else if(!d.die1&&d.die4&&x0>GX[3]){deadK=smooth(GX[3],GX[3]+.07,x0);xf=Math.min(x0,GX[3]+.012+deadK*.008)}
+      const unsel=!d.die1&&!d.die4&&!d.in500;
+      const B=bandW(xf);
+      let x=xf*W,y=cy+d.yS*B+Math.sin(tt*.8+i)*1.1+dy;
+      /* focus + colour */
+      const lensK=smooth(GX[1]-.01,GX[1]+.04,x0);
+      const scoreK=smooth(GX[2],GX[2]+.06,x0);
+      alpha=.30+.12*d.jit;
+      let rad=1.6;
+      if(d.in500){alpha=lerp(alpha,.8,lensK);rad=lerp(1.6,1.9,lensK)}
+      else{alpha=lerp(alpha,.08,lensK);rad=lerp(1.6,1.15,lensK)}
+      let r=255,gc=255,b=255;
+      if(d.in500&&scoreK>0){
+        const ti=(d.yS+1)/2;                           /* 0 = crown */
+        const c=BEAMRGB[3-Math.floor(ti*3.999)];
+        r=lerp(255,c[0],scoreK);gc=lerp(255,c[1],scoreK);b=lerp(255,c[2],scoreK);
+        alpha=lerp(alpha,.85,scoreK);
+      }
+      if(deadK>0){y=lerp(y,cy+B+24+d.jit*26,deadK);alpha=Math.max(alpha*(1-deadK),.16);rad=Math.max(rad,1.5)}
+      if(unsel&&x0>GX[3]){alpha*=1-smooth(GX[3],GX[3]+.09,x0)*.95}
+      /* selected dots converge into the disc */
+      if(d.slot>=0){
+        const ak=smooth(FUNDX-.05,FUNDX-.002,x0);
+        if(ak>0){
+          const ang=d.slot*2.39996,rr=Math.min(4+Math.sqrt(d.slot)*2.2,fundR-4);
+          const px=FX+rr*Math.cos(ang+tt*.05),py=cy+rr*Math.sin(ang+tt*.05);
+          x=lerp(x,px,ak);y=lerp(y,py,ak);
+        }
+      }
+      ctx.fillStyle=`rgba(${r|0},${gc|0},${b|0},${clamp(alpha,0,1).toFixed(3)})`;
+      ctx.beginPath();ctx.arc(x,y,rad,0,6.2832);ctx.fill();
+    }
+    /* ---- DOM: gate labels, counts, caption, rail, dock ---- */
+    gateEls.forEach((el,i)=>el.classList.toggle('on',front>gateDefs[i].x-.10));
+    const c1=Math.round(lerp(1000,750,smooth(GX[0]-.03,GX[0]+.1,front)));
+    gateEls[1].querySelector('.pk').textContent='~'+c1.toLocaleString('en-US');
+    const zi=front<GX[0]?0:front<GX[1]?1:front<GX[2]?2:front<GX[3]?3:front<FUNDX-.02?4:5;
+    if(zi!==zone){
+      zone=zi;
+      railEls.forEach((s,i)=>s.classList.toggle('on',zi<5&&i===zi));
+      progEl.style.opacity=zi===5?.35:1;
+      if(zi<=4){
+        const set=()=>{capN.textContent=F[zi].n+' — stage '+(zi+1)+' of 5';capH.innerHTML=F[zi].h;capP.innerHTML=F[zi].p};
+        if(reduced){set();capEl.classList.add('on')}
+        else{capEl.classList.remove('on');setTimeout(()=>{set();capEl.classList.add('on')},190)}
+      } else capEl.classList.remove('on');
+      outEl.classList.toggle('on',zi===5);
+      engEl.classList.toggle('on',zi===5);
+    }
+  }
+  function progress(){
+    const r=sec.getBoundingClientRect();
+    return clamp(-r.top/(r.height-innerHeight),0,1);
+  }
+  function frame(t){
+    const p=progress();
+    pd+=(p-pd)*.14;if(Math.abs(p-pd)<.0004)pd=p;
+    draw(pd,(t-t0)/1000);
+    raf=requestAnimationFrame(frame);
+  }
+  build();addEventListener('resize',()=>{build();draw(pd,0)});
+  if(reduced){pd=1;draw(1,0);return}
   new IntersectionObserver(es=>{
     if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
     else{cancelAnimationFrame(raf);raf=null}
